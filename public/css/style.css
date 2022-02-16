@@ -1,0 +1,68 @@
+.centering{
+    margin-top: 200px;
+    text-align: center;
+}
+
+.userPic {
+    margin-top: 40px;
+    border-radius: 50%;
+    width: 500px;
+    height: 500px;
+    object-fit: cover;
+    
+}
+
+.highHigh{
+    background-color: red;
+    color: white;
+    height: 220px;
+}
+
+.highMid{
+    background-color: orange;
+    color: black;
+    height: 220px;
+}
+
+.midHigh{
+    background-color: orange;
+    color: black;
+    height: 220px;
+}
+
+.midMid{
+    background-color: gold;
+    color: black;
+    height: 220px;
+}
+
+.highLow{
+    background-color: gold;
+    color: black;
+    height: 220px;
+}
+
+.lowHigh{
+    background-color: gold;
+    color: black;
+    height: 220px;
+}
+
+.lowMid{
+    background-color: yellow;
+    color: black;
+    height: 220px;
+}
+
+.midLow{
+    background-color: yellow;
+    color: black;
+    height: 220px;
+}
+
+
+.lowLow{
+    background-color: lightyellow;
+    color: black;
+    height: 220px;
+}
