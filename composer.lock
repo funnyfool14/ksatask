@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "20e519c30881c9cb9011455441d1742c",
+    "content-hash": "e2ea461faa243d2b543be6f0fa731f27",
     "packages": [
         {
             "name": "doctrine/inflector",
@@ -21,7 +21,7 @@
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2 || ^8.0"
+                "php": "^8.0"
             },
             "require-dev": {
                 "doctrine/coding-standard": "^8.2",
@@ -4522,6 +4522,9 @@
             "require": {
                 "php": "^7.1 || ^8.0"
             },
+            "replace": {
+                "myclabs/deep-copy": "self.version"
+            },
             "require-dev": {
                 "doctrine/collections": "^1.0",
                 "doctrine/common": "^2.6",
@@ -6658,8 +6661,8 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^8.0"
+        "php": "~8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.1.0"
 }
