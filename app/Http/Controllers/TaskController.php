@@ -45,6 +45,7 @@ class TaskController extends Controller
             'private'=>'required',
             'detail'=>'max:400|required']);
  
+        $user = \Auth::user();
         $task = new Task;
 
         $task->register = $user->id;

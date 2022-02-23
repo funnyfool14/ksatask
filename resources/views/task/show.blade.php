@@ -17,7 +17,7 @@
     @if($task->existInCharge())
     <div class = 'row mt-4'>
         <a class = 'col-sm-3'>担当者</a>
-        <div class = "col-sm-4">
+        <div class = "col-sm-6">
             @foreach($task->inCharge()->get() as $user)
             <h3 class = ''>{!!link_to_route('users.show',$user->firstName.' '.$user->lastName,[$user->id])!!}</h3>
             @endforeach
