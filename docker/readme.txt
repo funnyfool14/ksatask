@@ -1,9 +1,13 @@
-## docker create
-
-docker-compose build
+## docker build process
 docker-compose down
+docker-compose build
 docker-compose up -d
+docker-compose exec app /bin/sh
+/var/www/work # composer update
+/var/www/work # php artisan migrate
+/var/www/work # php artisan storage:link
 
+--- ここまで
 //Laravel セッティング
 docker-compose exec app composer install
 docker-compose exec app php artisan key:generate
@@ -18,3 +22,5 @@ Psy Shell v0.10.11 (PHP 8.0.9 — cli) by Justin Hileman
 >>> App\Models\User::create(['name' => '管理者', 'email' => 'admin@gmail.com', 'password' => bcrypt('12345Ab')]);
 
 >>> exit
+
+
