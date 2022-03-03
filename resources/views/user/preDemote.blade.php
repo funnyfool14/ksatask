@@ -7,7 +7,7 @@
     @elseif($user->manager())
     <h4>{{$user->firstName.' '.$user->lastName.' をリーダーに降格しますか？'}}</h4>
     @elseif(($user->post())==4)
-    <h4>{{$user->firstName.' '.$user->lastName.' の人事権限を剥奪しますか？'}}</h4>
+    <h4>{{$user->firstName.' '.$user->lastName.' の人事権限をなくしますか？'}}</h4>
     @endif
 </div>
 <div class = "row mt-4">

@@ -23,7 +23,7 @@ class Company extends Model
 
     public function superior() //マネージャー以上の判断
     {
-        $ids = $this->hasMany(Profile::class,'companyId')->where('post',5)->orWhere('post',4)->orWhere('post',4)->pluck('userId');
+        $ids = $this->hasMany(Profile::class,'companyId')->where('post',5)->orWhere('post',4)->orWhere('post',3)->pluck('userId');
         return User::find($ids);
     }
     
