@@ -99,5 +99,11 @@ class MacroServiceProvider extends ServiceProvider
             return User::find($userIds);
         });
 
+        Collection::macro('collectionTasks',function(){
+            $teamIds = $this->pluck('id');
+            $taskIds = DB::table('tasks')->where('teamId',$teamIds)->pluck('id');
+            return Task::find($taskIds);
+        });
+
     }
 }

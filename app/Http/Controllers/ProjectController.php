@@ -10,7 +10,7 @@ use \App\Team;
 use \App\User;
 use \App\Task;
 use \App\Profile;
-
+use \DB;
 class ProjectController extends Controller
 {
     /**
@@ -75,10 +75,13 @@ class ProjectController extends Controller
 
             $users = $company->users();
 
-            return view ('project.show',[
+            /*return view ('project.show',[
                 'project' => $project,
                 'users' => $users,
-            ]);
+            ]);*/
+            return redirect(route('projects.show',[
+                'project' => $project->id,
+            ]));
     }
 
     /**
@@ -90,10 +93,8 @@ class ProjectController extends Controller
     public function show($id)
     {
         $project = Project::find($id);
-        $tasks = $project->tasks();
 
-        if($project->tasks()->get()){
-            
+        if(count($project->teams())){
             $highlowTasks = $project->tasks()->public()->highlow()->paginate(4,['*'],'highlow')->appends( ['highlow' => PostRequest::input('highlow') , 'highmid' => PostRequest::input('highmid') , 'highhigh' => PostRequest::input('highhigh') , 'midlow' => PostRequest::input('midlow') , 'midmid' => PostRequest::input('midmid') , 'midhigh' => PostRequest::input('midhigh') , 'lowlow' => PostRequest::input('lowlow') , 'lowmid' => PostRequest::input('lowmid') , 'lowhigh' => PostRequest::input('lowhigh')]);
             $highmidTasks = $project->tasks()->public()->highmid()->paginate(4,['*'],'highmid')->appends( ['highlow' => PostRequest::input('highlow') , 'highmid' => PostRequest::input('highmid') , 'highhigh' => PostRequest::input('highhigh') , 'midlow' => PostRequest::input('midlow') , 'midmid' => PostRequest::input('midmid') , 'midhigh' => PostRequest::input('midhigh') , 'lowlow' => PostRequest::input('lowlow') , 'lowmid' => PostRequest::input('lowmid') , 'lowhigh' => PostRequest::input('lowhigh')]);
             $highhighTasks = $project->tasks()->public()->highhigh()->paginate(4,['*'],'highhigh')->appends( ['highlow' => PostRequest::input('highlow') , 'highmid' => PostRequest::input('highmid') , 'highhigh' => PostRequest::input('highhigh') , 'midlow' => PostRequest::input('midlow') , 'midmid' => PostRequest::input('midmid') , 'midhigh' => PostRequest::input('midhigh') , 'lowlow' => PostRequest::input('lowlow') , 'lowmid' => PostRequest::input('lowmid') , 'lowhigh' => PostRequest::input('lowhigh')]);
@@ -103,8 +104,7 @@ class ProjectController extends Controller
             $lowlowTasks = $project->tasks()->public()->lowlow()->paginate(4,['*'],'lowlow')->appends( ['highlow' => PostRequest::input('highlow') , 'highmid' => PostRequest::input('highmid') , 'highhigh' => PostRequest::input('highhigh') , 'midlow' => PostRequest::input('midlow') , 'midmid' => PostRequest::input('midmid') , 'midhigh' => PostRequest::input('midhigh') , 'lowlow' => PostRequest::input('lowlow') , 'lowmid' => PostRequest::input('lowmid') , 'lowhigh' => PostRequest::input('lowhigh')]);
             $lowmidTasks = $project->tasks()->public()->lowmid()->paginate(4,['*'],'lowmid')->appends( ['highlow' => PostRequest::input('highlow') , 'highmid' => PostRequest::input('highmid') , 'highhigh' => PostRequest::input('highhigh') , 'midlow' => PostRequest::input('midlow') , 'midmid' => PostRequest::input('midmid') , 'midhigh' => PostRequest::input('midhigh') , 'lowlow' => PostRequest::input('lowlow') , 'lowmid' => PostRequest::input('lowmid') , 'lowhigh' => PostRequest::input('lowhigh')]);
             $lowhighTasks = $project->tasks()->public()->lowhigh()->paginate(4,['*'],'lowhigh')->appends( ['highlow' => PostRequest::input('highlow') , 'highmid' => PostRequest::input('highmid') , 'highhigh' => PostRequest::input('highhigh') , 'midlow' => PostRequest::input('midlow') , 'midmid' => PostRequest::input('midmid') , 'midhigh' => PostRequest::input('midhigh') , 'lowlow' => PostRequest::input('lowlow') , 'lowmid' => PostRequest::input('lowmid') , 'lowhigh' => PostRequest::input('lowhigh')]);
-            
-
+        
             return view ('project.show',[
                 'project' => $project,
                 'highlowTasks' => $highlowTasks,
@@ -118,8 +118,28 @@ class ProjectController extends Controller
                 'lowhighTasks' => $lowhighTasks,
             ]);
         }
+
+        /*$highlowTasks = null;
+        $highmidTasks = null;
+        $highhighTasks = null;
+        $midlowTasks = null;
+        $midmidTasks = null;
+        $midhighTasks = null;
+        $lowlowTasks = null;
+        $lowmidTasks = null;
+        $lowhighTasks = null;*/
+        
         return view ('project.show',[
             'project' => $project, 
+            /*'highlowTasks' => $highlowTasks,
+            'highmidTasks' => $highmidTasks,
+            'highhighTasks' => $highhighTasks,
+            'midlowTasks' => $midlowTasks,
+            'midmidTasks' => $midmidTasks,
+            'midhighTasks' => $midhighTasks,
+            'lowlowTasks' => $lowlowTasks,
+            'lowmidTasks' => $lowmidTasks,
+            'lowhighTasks' => $lowhighTasks,*/
         ]);
     }
 

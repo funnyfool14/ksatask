@@ -19,7 +19,9 @@
     </div>
 </div>
 @include('project.indexButton')
+@if(count($project->teams()))
 <div class = "">
     @include('task.graph')
 </div>
+@endif
 @endsection('content')
