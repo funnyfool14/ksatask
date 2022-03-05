@@ -94,7 +94,8 @@ class ProjectController extends Controller
     {
         $project = Project::find($id);
 
-        if(count($project->teams())){
+        //if(count($project->teams())){
+        if($project->existTeam()){
             $highlowTasks = $project->tasks()->public()->highlow()->paginate(4,['*'],'highlow')->appends( ['highlow' => PostRequest::input('highlow') , 'highmid' => PostRequest::input('highmid') , 'highhigh' => PostRequest::input('highhigh') , 'midlow' => PostRequest::input('midlow') , 'midmid' => PostRequest::input('midmid') , 'midhigh' => PostRequest::input('midhigh') , 'lowlow' => PostRequest::input('lowlow') , 'lowmid' => PostRequest::input('lowmid') , 'lowhigh' => PostRequest::input('lowhigh')]);
             $highmidTasks = $project->tasks()->public()->highmid()->paginate(4,['*'],'highmid')->appends( ['highlow' => PostRequest::input('highlow') , 'highmid' => PostRequest::input('highmid') , 'highhigh' => PostRequest::input('highhigh') , 'midlow' => PostRequest::input('midlow') , 'midmid' => PostRequest::input('midmid') , 'midhigh' => PostRequest::input('midhigh') , 'lowlow' => PostRequest::input('lowlow') , 'lowmid' => PostRequest::input('lowmid') , 'lowhigh' => PostRequest::input('lowhigh')]);
             $highhighTasks = $project->tasks()->public()->highhigh()->paginate(4,['*'],'highhigh')->appends( ['highlow' => PostRequest::input('highlow') , 'highmid' => PostRequest::input('highmid') , 'highhigh' => PostRequest::input('highhigh') , 'midlow' => PostRequest::input('midlow') , 'midmid' => PostRequest::input('midmid') , 'midhigh' => PostRequest::input('midhigh') , 'lowlow' => PostRequest::input('lowlow') , 'lowmid' => PostRequest::input('lowmid') , 'lowhigh' => PostRequest::input('lowhigh')]);
@@ -181,7 +182,8 @@ class ProjectController extends Controller
     public function members($id)
     {
         $project = Project::find($id);
-        if(count($project->teams())){
+        //if(count($project->teams())){
+        if($project->existTeam()){
         $members =$project->teams()->collectionMembers();
 
         return view ('project.members',[
@@ -200,7 +202,6 @@ class ProjectController extends Controller
         $project = Project::find($id);
 
         if($project->existTeam()){
-
             return redirect(route('teams.index',[
                 'id' => $id,
             ]));
