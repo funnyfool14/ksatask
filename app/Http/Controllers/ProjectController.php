@@ -181,11 +181,17 @@ class ProjectController extends Controller
     public function members($id)
     {
         $project = Project::find($id);
+        if(count($project->teams())){
         $members =$project->teams()->collectionMembers();
 
         return view ('project.members',[
             'project' => $project,
             'members' => $members,
+        ]);
+        }
+
+        return view ('project.members',[
+            'project' => $project,
         ]);
     }
 
