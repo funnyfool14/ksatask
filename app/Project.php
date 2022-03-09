@@ -27,6 +27,28 @@ class Project extends Model
     public function tasks()
     {
         $teamIds = $this->teams()->pluck('id');
-        return Task::where('teamId',$teamIds);
+        return Task::whereIn('teamId',$teamIds);
+    }
+
+    public function leaders($id)
+    {
+        $teams = $this->teams();
+        foreach($teams as $team){
+            if($team->where('leader',$id)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function notLeaders($id)
+    {
+        $leaderIds = $this->teams()->pluck('leader');
+        foreach($leaderIds as $leaderId){
+            if($leaderId==$id){
+                return false;
+            }
+            return true;
+        }
     }
 }

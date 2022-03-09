@@ -16,7 +16,7 @@
             <h3>{!!link_to_route('users.show',$team->deputy()->firstName.' '.$team->deputy()->lastName,[$team->deputy()->id],[])!!}</h3>
         </div>
         <div class = "col-sm-3">
-            @if(($team->leader)==Auth::id())
+            @if(($team->leader)==Auth::id()|($team->project()->manager())==Auth::user())
             {{link_to_route('deputy.kick','解任',['id' => $team->id],['class'=>'btn btn-outline-danger ml-3'])}}
             @endif
         </div>
@@ -27,7 +27,7 @@
         <div class = "row">
             <h3 class='offset-sm-1 col-sm-6'>{!!link_to_route('users.show',$member->firstName.' '.$member->lastName,[$member->id],[])!!}</h3>
             <div class = 'mt-2 col-sm-4'>
-                @if(($team->leader)==Auth::id())
+                @if(($team->leader)==Auth::id()|($team->project()->manager())==Auth::user())
                 {{link_to_route('teams.remove','チームから外す',['team'=>$team->id,'user'=>$member->id],['class'=>'btn btn-danger btn-bock btn-sm'])}}
                 @endif
             </div>

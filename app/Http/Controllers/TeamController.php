@@ -13,12 +13,12 @@ use \DB;
 class TeamController extends Controller
 {
 
-    public function ready($id)
+    public function ready($id) //create
     {
 
         $project = Project::find($id);
-        $users = \Auth::user()->company()->users();
-
+        $users = \Auth::user()->company()->leaders();
+    
         return view ('team.ready',[
             'project' => $project,
             'users' => $users,
@@ -26,25 +26,17 @@ class TeamController extends Controller
 
     }
 
-    public function leaderDecide(Request $request, $projectId)
+    public function leaderDecide(Request $request, $projectId) //store
     {
         $project = Project::find($projectId);
-        $users = \Auth::user()->company()->users();
 
         $team = new Team;
         $team->projectId = $projectId;
         $team->teamName = $request->teamName;
         $team->leader = $request->leader;
-        $team->deputy = null;
-        if($request->deputy){
-            $team->deputy = $request->deputy;
-        };
         $team->save();
 
         $team->members()->attach($team->leader);
-        if($team->deputy){
-            $team->members()->attach($team->deputy);
-        }
         
         return redirect(route('teams.show',[
             'id' => $team->id,
@@ -65,7 +57,7 @@ class TeamController extends Controller
     public function show($teamId)
     {
         $team = Team::find($teamId);
-        $users = \Auth::user()->company()->users();
+        $users = \Auth::user()->company()->lowly();
 
         $members = $team->membersLeader();
         if($team->deputy){
@@ -77,7 +69,7 @@ class TeamController extends Controller
             $highlowTasks = $team->tasks()->public()->highlow()->paginate(4,['*'],'highlow')->appends( ['highlow' => PostRequest::input('highlow') , 'highmid' => PostRequest::input('highmid') , 'highhigh' => PostRequest::input('highhigh') , 'midlow' => PostRequest::input('midlow') , 'midmid' => PostRequest::input('midmid') , 'midhigh' => PostRequest::input('midhigh') , 'lowlow' => PostRequest::input('lowlow') , 'lowmid' => PostRequest::input('lowmid') , 'lowhigh' => PostRequest::input('lowhigh')]);
             $highmidTasks = $team->tasks()->public()->highmid()->paginate(4,['*'],'highmid')->appends( ['highlow' => PostRequest::input('highlow') , 'highmid' => PostRequest::input('highmid') , 'highhigh' => PostRequest::input('highhigh') , 'midlow' => PostRequest::input('midlow') , 'midmid' => PostRequest::input('midmid') , 'midhigh' => PostRequest::input('midhigh') , 'lowlow' => PostRequest::input('lowlow') , 'lowmid' => PostRequest::input('lowmid') , 'lowhigh' => PostRequest::input('lowhigh')]);
             $highhighTasks = $team->tasks()->public()->highhigh()->paginate(4,['*'],'highhigh')->appends( ['highlow' => PostRequest::input('highlow') , 'highmid' => PostRequest::input('highmid') , 'highhigh' => PostRequest::input('highhigh') , 'midlow' => PostRequest::input('midlow') , 'midmid' => PostRequest::input('midmid') , 'midhigh' => PostRequest::input('midhigh') , 'lowlow' => PostRequest::input('lowlow') , 'lowmid' => PostRequest::input('lowmid') , 'lowhigh' => PostRequest::input('lowhigh')]);
-            $midlowTasks = $team->tasks()->public()->midlow()->paginate(4,['*'],'midmid')->appends( ['highlow' => PostRequest::input('highlow') , 'highmid' => PostRequest::input('highmid') , 'highhigh' => PostRequest::input('highhigh') , 'midlow' => PostRequest::input('midlow') , 'midmid' => PostRequest::input('midmid') , 'midhigh' => PostRequest::input('midhigh') , 'lowlow' => PostRequest::input('lowlow') , 'lowmid' => PostRequest::input('lowmid') , 'lowhigh' => PostRequest::input('lowhigh')]);
+            $midlowTasks = $team->tasks()->public()->midlow()->paginate(4,['*'],'midlow')->appends( ['highlow' => PostRequest::input('highlow') , 'highmid' => PostRequest::input('highmid') , 'highhigh' => PostRequest::input('highhigh') , 'midlow' => PostRequest::input('midlow') , 'midmid' => PostRequest::input('midmid') , 'midhigh' => PostRequest::input('midhigh') , 'lowlow' => PostRequest::input('lowlow') , 'lowmid' => PostRequest::input('lowmid') , 'lowhigh' => PostRequest::input('lowhigh')]);
             $midmidTasks = $team->tasks()->public()->midmid()->paginate(4,['*'],'midmid')->appends( ['highlow' => PostRequest::input('highlow') , 'highmid' => PostRequest::input('highmid') , 'highhigh' => PostRequest::input('highhigh') , 'midlow' => PostRequest::input('midlow') , 'midmid' => PostRequest::input('midmid') , 'midhigh' => PostRequest::input('midhigh') , 'lowlow' => PostRequest::input('lowlow') , 'lowmid' => PostRequest::input('lowmid') , 'lowhigh' => PostRequest::input('lowhigh')]);
             $midhighTasks = $team->tasks()->public()->midhigh()->paginate(4,['*'],'midhigh')->appends( ['highlow' => PostRequest::input('highlow') , 'highmid' => PostRequest::input('highmid') , 'highhigh' => PostRequest::input('highhigh') , 'midlow' => PostRequest::input('midlow') , 'midmid' => PostRequest::input('midmid') , 'midhigh' => PostRequest::input('midhigh') , 'lowlow' => PostRequest::input('lowlow') , 'lowmid' => PostRequest::input('lowmid') , 'lowhigh' => PostRequest::input('lowhigh')]);
             $lowlowTasks = $team->tasks()->public()->lowlow()->paginate(4,['*'],'lowlow')->appends( ['highlow' => PostRequest::input('highlow') , 'highmid' => PostRequest::input('highmid') , 'highhigh' => PostRequest::input('highhigh') , 'midlow' => PostRequest::input('midlow') , 'midmid' => PostRequest::input('midmid') , 'midhigh' => PostRequest::input('midhigh') , 'lowlow' => PostRequest::input('lowlow') , 'lowmid' => PostRequest::input('lowmid') , 'lowhigh' => PostRequest::input('lowhigh')]);
@@ -110,12 +102,12 @@ class TeamController extends Controller
     public function memberPost(Request $request, $teamId)
     {
         $team = Team::find($teamId);
-        if(DB::table('teamsUsers')->where('userId',$request->userId)->doesntExist()){
+        if(DB::table('teamsUsers')->where('teamId',$teamId)->where('userId',$request->userId)->doesntExist()){
             $team->members()->attach($request->userId);
         };
 
         return redirect(route('teams.show',[
-            'id' => $team->id,
+            'id' => $teamId,
         ]));
     }
 
@@ -180,6 +172,42 @@ class TeamController extends Controller
 
         return redirect(route('teams.show',[
             'id' => $teamId,
+        ]));
+    }
+
+    public function edit($id)
+    {
+        $team = Team::find($id);
+        $users = \Auth::user()->company()->users();
+
+        return view ('team.edit',[
+        'team' => $team,
+        'users' => $users
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'teamName'=>'max:30|required',
+            'leader'=>'required',]); 
+
+        $team = Team::find($id);
+        $team->teamName = $request->teamName;
+        $team->leader = $request->leader;
+        $team->save();
+
+        if($team->members()->where('userId',$team->leader)->doesntExist()){
+            $team->members()->attach($team->leader);
+        }
+        if($team->deputy){
+            if($team->members()->where('userId',$team->deputy)->doesntExist()){
+                $team->members()->attach($team->deputy);
+            }
+        }
+        
+        return redirect(route('teams.show',[
+            'id' => $team->id,
         ]));
     }
 }

@@ -95,14 +95,19 @@ class MacroServiceProvider extends ServiceProvider
 
         Collection::macro('collectionMembers',function(){
             $teamIds = $this->pluck('id');
-            $userIds = DB::table('teamsUsers')->where('teamId',$teamIds)->pluck('userId');
+            $userIds = DB::table('teamsUsers')->whereIn('teamId',$teamIds)->pluck('userId');
             return User::find($userIds);
         });
 
         Collection::macro('collectionTasks',function(){
             $teamIds = $this->pluck('id');
-            $taskIds = DB::table('tasks')->where('teamId',$teamIds)->pluck('id');
+            $taskIds = DB::table('tasks')->whereIn('teamId',$teamIds)->pluck('id');
             return Task::find($taskIds);
+        });
+
+        Collection::macro('leaders',function(){
+            $lederIds = $this->pluck('leader');
+            return User::find($lederIds);
         });
 
     }

@@ -2,7 +2,6 @@
 @include('commons.navbar')
 @section('content')
 <div class = 'row'>
-    {{----}}
     @include('user.left')
     @include('user.right')
 </div>

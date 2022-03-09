@@ -34,7 +34,8 @@ class Team extends Model
     public function membersLeader()
     {  
         $leader = $this->leader;
-        $ids = DB::table('teamsUsers')->where('teamId',$this->id)->where('userId','!=',$leader)->pluck('userId');
+        $lowlyIds = \Auth::user()->company()->lowly()->pluck('id');
+        $ids = DB::table('teamsUsers')->where('teamId',$this->id)->where('userId','!=',$leader)->whereIn('userId',$lowlyIds)->pluck('userId');
         return User::find($ids);
     }
 
@@ -46,10 +47,10 @@ class Team extends Model
         return User::find($ids);
     }
 
-   /*public function users()
+   public function users()
     {
         return $this->belongsToMany(User::class,'teamsUsers','teamId','userId')->withTimestamps();
-    }*/
+    }
 
     public function tasks()
     {

@@ -7,21 +7,20 @@
 </div>
 <div class = "row">
     @include('team.members')
-    @if((Auth::user())==($team->leader())|(Auth::user())==($team->deputy()))
-        @include('team.memberPick')
-    @endif
+    @include('team.memberPick')
 </div>
 <div class = "row mt-5">
-    @if($members->first())
     @include('team.deputyPick')
-    @endif
-    @if((Auth::user())==($team->leader())|(Auth::user())==($team->deputy()))
     @include('team.taskCreateButton')
-    @endif
 </div>
 <div class = "">
     @include('task.graph')
 </div>
+@if((Auth::user())==($team->project()->manager()))
+    <div class = "offset-sm-4 col-sm-4 mt-4">
+        {{link_to_route('teams.edit','チーム編集',['id'=>$team->id],['class' => 'btn btn-primary btn-block'])}}
+    </div>
+@endif
 <div class = "offset-sm-4 col-sm-4 mt-4 mb-5">
     {{link_to_route('projects.show','プロジェクトTOP',['project'=>$team->projectId],['class' => 'btn btn-outline-success btn-block'])}}
 </div>

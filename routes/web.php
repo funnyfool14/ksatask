@@ -24,6 +24,7 @@ Route::group(['middleware'=>['auth']],function(){
     Route::get('user/{id}/promote','UserController@promote')->name('users.promote');
     //Route::post('user/{id}/promote','UserController@promote')->name('users.promote');
     Route::get('user/{id}/demote','UserController@demote')->name('users.demote');
+    Route::get('user/{id}/teams','UserController@teams')->name('users.teams');
 
     Route::resource('companies','CompanyController');
     Route::get('companiesBelong','CompanyController@choice')->name('companies.choice');
@@ -39,12 +40,15 @@ Route::group(['middleware'=>['auth']],function(){
     Route::get('project/{id}/newTeam','TeamController@ready')->name('teams.ready');
     Route::post('project/{id}/newTeam','TeamController@leaderDecide')->name('teams.leaderDecide');
     Route::post('team/{id}/member','TeamController@memberPost')->name('teams.memberPost');
+    Route::get('team/{teamId}/member/{userId}','TeamController@memberDelete')->name('teams.memberDelete');
     Route::get('project/{id}/teams','TeamController@index')->name('teams.index');
     Route::get('team/{id}','TeamController@show')->name('teams.show');
     Route::get('team/{id}/deputyPick','TeamController@deputyChoice')->name('deputy.choice');
     Route::post('team/{id}/deputyPick','TeamController@deputyPick')->name('deputy.pick');
     Route::get('team/{id}/deputyKick','TeamController@deputyKick')->name('deputy.kick');
     Route::get('team/{team}/user/{user}','TeamController@remove')->name('teams.remove');
+    Route::get('team/{id}/edit','TeamController@edit')->name('teams.edit');
+    Route::put('team/{id}/edit','TeamController@update')->name('teams.update');
 
     Route::resource('tasks','TaskController');
     Route::get('team/{id}/taskCreate','TaskController@teamCreate')->name('tasks.teamCreate');

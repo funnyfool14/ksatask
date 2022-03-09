@@ -153,7 +153,14 @@ class ProjectController extends Controller
      */
     public function edit($id)
     {
-        //
+        $project = Project::find($id);
+        $company = \Auth::user()->company();
+        $users = $company->superior();
+
+        return view ('project.edit',[
+            'project' => $project,
+            'users' => $users,
+        ]);
     }
 
     /**
@@ -165,7 +172,22 @@ class ProjectController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'projectName'=>'max:30|required',
+            'manager'=>'required',
+            'deadline'=>'required',
+            'detail'=>'max:400|required']);
+
+            $project = Project::find($id);
+            $project->projectName = $request->projectName;
+            $project->manager = $request->manager;
+            $project->deadline = $request->deadline;
+            $project->detail = $request->detail;
+            $project->save();
+
+        return redirect(route('projects.show',[
+        'project' => $id,
+        ]));
     }
 
     /**
@@ -182,14 +204,16 @@ class ProjectController extends Controller
     public function members($id)
     {
         $project = Project::find($id);
-        //if(count($project->teams())){
-        if($project->existTeam()){
-        $members =$project->teams()->collectionMembers();
 
-        return view ('project.members',[
-            'project' => $project,
-            'members' => $members,
-        ]);
+        if($project->existTeam()){
+            $leaders = $project->teams()->leaders();
+            $members = $project->teams()->collectionMembers()->diff($leaders);
+            
+            return view ('project.members',[
+                'project' => $project,
+                'leaders' => $leaders,
+                'members' => $members,
+            ]);
         }
 
         return view ('project.members',[

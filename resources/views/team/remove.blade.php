@@ -13,10 +13,10 @@
 </div>
 <div class = "row mt-5">
     <div class = "offset-sm-3 col-sm-3 mr-2">
-        {{link_to_route('projects.members','いいえ',['id'=>$project->id],['class'=>'btn btn-block btn-success'])}}
+        {{link_to_route('teams.show','いいえ',['id'=>$team->id],['class'=>'btn btn-block btn-success'])}}
     </div>
     <div class = "col-sm-3 ml-2">
-    {{link_to_route('projects.memberDelete','はい',['project'=>$project->id,'user'=>$user->id],['class'=>'btn btn-block btn-danger'])}}
+    {{link_to_route('teams.memberDelete','はい',['teamId'=>$team->id,'userId'=>$user->id],['class'=>'btn btn-block btn-danger'])}}
     </div>
 </div>
 @endsection('content')

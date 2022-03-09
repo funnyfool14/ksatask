@@ -3,20 +3,10 @@
 @section('content')
 <div class = "text-center">
     <h3>{{$project->projectName}}</h4>
+    <h4 class = 'mt-1'>{{'チーム一覧'}}</h4>
 </div>
-<div class = "text-center">
-    <h4>{{'チーム一覧'}}</h4>
+@include('team.list')
+<div class = "offset-sm-4 col-sm-4 mt-5 mt-5 mb-5">
+    {{link_to_route('projects.show','プロジェクトTOP',['project'=>$project->id],['class' => 'btn btn-outline-success btn-block'])}}
 </div>
-@foreach ($teams as $team)
-<div class = "mt-4 offset-sm-1">
-    <div class = "row">
-        <div class = "col-sm-4">
-            <h4>{{link_to_route('teams.show',$team->teamName,[$team->id],[])}}</h4>
-        </div>
-        <div class = "col-sm-4">
-            <h4>{{link_to_route('users.show',$team->leader()->firstName.' '.$team->leader()->lastName,[$team->leader],[])}}</h4>
-        </div>
-    </div>
-</div>
-@endforeach
 @endsection('content')

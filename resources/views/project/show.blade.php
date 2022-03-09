@@ -2,7 +2,8 @@
 @include('commons.navbar')
 @section('content')
 <div class = "text-center">
-            <h3>{{$project->projectName}}</h3></div>
+    <h3>{{$project->projectName}}</h3>
+</div>
 <div class = "row">
     <div class = "col-sm-5 text-right mt-3">
         <div class = "row">
@@ -19,8 +20,8 @@
     </div>
 </div>
 @include('project.indexButton')
-@if(count($project->teams()))
-<div class = "">
+@if($project->existTeam())
+<div class = ''>
     @include('task.graph')
 </div>
 @endif

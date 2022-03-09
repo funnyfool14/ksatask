@@ -393,6 +393,17 @@ class UserController extends Controller
             'user' => $user->id,
         ]));
     }
+
+    public function teams($id)
+    {
+        $user =User::find($id);
+        $teams = $user->team()->get();
+
+        return view('user.teams',[
+            'user' => $user,
+            'teams' => $teams,
+        ]);
+    }
 }
 
 

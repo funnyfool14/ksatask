@@ -26,5 +26,17 @@ class Company extends Model
         $ids = $this->hasMany(Profile::class,'companyId')->where('post',5)->orWhere('post',4)->orWhere('post',3)->pluck('userId');
         return User::find($ids);
     }
+
+    public function leaders() //リーダー以上の判断
+    {
+        $ids = $this->hasMany(Profile::class,'companyId')->where('post','>=',2)->pluck('userId');
+        return User::find($ids);
+    }
+
+    public function lowly() //リーダー以下の判断
+    {
+        $ids = $this->hasMany(Profile::class,'companyId')->where('post','<=',2)->pluck('userId');
+        return User::find($ids);
+    }
     
 }

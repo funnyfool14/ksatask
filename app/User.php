@@ -196,9 +196,9 @@ class User extends Authenticatable
             });
     }
 
-    public function leaderPick()//foreachで回して使用
+    /*public function leaderPick()//foreachで回して使用
     {
         $profile = Profile::where('userId',$this->id)->where('post',2)->first();
         return $profile->user();
-    }
+    }*/
 }

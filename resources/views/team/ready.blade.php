@@ -22,7 +22,7 @@
                 @endforeach
             </select>
         </div>
-        <div class="form-group">
+        {{--<div class="form-group">
             <label for='deputy'>サブリーダー</label>
             <select class='form-control' name='deputy'>
                 <option value=''disabled selected style='display:none;'>選任しなくても可</option>
@@ -31,7 +31,7 @@
                 <option value='{{$user->id}}'@if(old('deputy')==$user->id) selected @endif>{{$user->firstName.' '.$user->lastName}}</option>
                 @endforeach
             </select>
-        </div>
+        </div>--}}
         <div class="text-center mt-5 mb-5">
             <button type="submit" class='btn btn-primary btn-lg mt-5 col-sm-8'>チーム結成</button>
         </div> 
