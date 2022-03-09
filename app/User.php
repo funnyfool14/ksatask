@@ -61,15 +61,25 @@ class User extends Authenticatable
         return false;
     }
 
-    public function sentMessages()
+    /*public function sentMessages()
     {
         return $this->hasMany(Message::class,'sender')->get();
 
-        /*if(($messages->count())>0){
+        if(($messages->count())>0){
             return $messages;
         }
-        return null;*/
-    }
+        return null;
+    }*/
+
+    public function sentMessages()
+    {
+        $messages = $this->hasMany(Message::class,'sender')->get();
+        
+        if(($messages->count())>0){
+            return $messages;
+        }
+        return null;
+    } 
 
     public function recievedMessages()
     {

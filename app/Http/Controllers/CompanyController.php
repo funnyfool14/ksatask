@@ -15,14 +15,11 @@ class CompanyController extends Controller
      */
     public function index()
     {
-
-        $user = \Auth::user();
-        $company = $user->profile()->company();
+        $company = \Auth::user()->profile()->company();
         $users = $company->profiles()->users()->exceptMe();
 
         if($company){
             return view ('company.index',[
-            'user' => $user,
             'company' => $company,
             'users' => $users,
             ]);

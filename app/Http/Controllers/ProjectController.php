@@ -231,9 +231,14 @@ class ProjectController extends Controller
             ]));
         }
 
+        if((\Auth::user())==($project->manager())|(\Auth::user()->post())>=4)
         return redirect (route('teams.ready',[
             'id' => $id
         ])); 
+
+        return redirect(route('projects.show',[
+        'project' => $id,
+        ]));
     }
 
     public function remove($projectId, $userId)

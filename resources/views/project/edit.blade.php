@@ -8,6 +8,7 @@
             <label for="projectName">プロジェクト名</label>
             <input type="text" class="form-control" name="projectName" value={{$project->projectName}}>
         </div>
+        @if((\Auth::user()->post())>=4)
         <div class="form-group">
             <label for='manager'>プロジェクトマネージャー</label>
             <select class='form-control' name='manager'>
@@ -18,6 +19,15 @@
                 @endforeach
             </select>
         </div>
+        @elseif((\Auth::user())==$project->manager())
+        <div class="form-group">
+            <label for='manager'>プロジェクトマネージャー</label>
+            <select class='form-control' name='manager'>
+                {{--<label for='manager'>マネージャー</label>--}}
+                <option value='{{$project->manager()->id}}' style='display:none;'>{{$project->manager()->firstName.' '.$project->manager()->lastName}}</option>
+            </select>
+        </div>
+        @endif
         <div class="form-group">
             <label for="deadline">期日</label>
             <input type="date" class="form-control" name="deadline" value="{{$project->deadline}}">

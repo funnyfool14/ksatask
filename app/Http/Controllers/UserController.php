@@ -164,14 +164,13 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            /*'firstName'=>'required',
-            'lastName'=>'required',*/
+            'firstName'=>'required',
+            'lastName'=>'required',
             'pic'=>'image'
             ]);
 
         $user = User::find($id);
         $profile = $user->profile();
-        
         $user->firstName = $request->firstName; 
         $user->lastName = $request->lastName;
 
@@ -179,10 +178,9 @@ class UserController extends Controller
         if($pic){
             $path = $pic->store('storage','public');
             $user->pic = $path;
-
-        $user->save();
+        }
         
-    }
+        $user->save();
 
         $profile->maxim = $request->maxim;
         $profile->coment = $request->coment;
