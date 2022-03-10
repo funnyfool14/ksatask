@@ -320,7 +320,7 @@ class UserController extends Controller
     {
         $user = User::find($userId);
 
-        return view('user.prePromote',[
+        return view('user.promote',[
             'user' => $user,
         ]);
     }
@@ -329,67 +329,83 @@ class UserController extends Controller
     {
         $user = User::find($userId);
 
-        return view('user.preDemote',[
+        return view('user.demote',[
             'user' => $user,
         ]);
     }
 
-    public function promote($userId)
+    public function promote(Request $request, $userId)
     {
         $user = User::find($userId);
-        $profile = $user->profile();
 
-        if(($user->post())==1){
-            $profile->post=2;
-            $profile->save();
+        if(($request->password)==(\Auth::user()->company()->companyPass)){
 
-        return redirect(route('users.show',[
-            'user' => $user->id,
-        ]));
-        }
+            $profile = $user->profile();
 
-        if(($user->post())==2){
-            $profile->post=3;
-            $profile->save();
-            
+            if(($user->post())==1){
+                $profile->post=2;
+                $profile->save();
+
             return redirect(route('users.show',[
                 'user' => $user->id,
-            ]));
-        }
+                ]));
+            }
+
+            if(($user->post())==2){
+                $profile->post=3;
+                $profile->save();
+            
+                return redirect(route('users.show',[
+                    'user' => $user->id,
+                ]));
+            }
         
-        if(($user->post())==3){
-            $profile->post=4;
-            $profile->save();
+            if(($user->post())==3){
+                $profile->post=4;
+                $profile->save();
             
-            return redirect(route('users.show',[
-                'user' => $user->id,
+                return redirect(route('users.show',[
+                    'user' => $user->id,
+                ]));
+            }
+
+            return redirect (route('users.show',[
+                'user' => $user,
             ]));
         }
+
+        return back();
     }
 
-    public function demote($userId)
+    public function demote(Request $request, $userId)
     {
         $user = User::find($userId);
-        $profile = $user->profile();
 
-        if(($user->post())==2){
-            $profile->post=1;
-            $profile->save();
-        }
+        if(($request->password)==(\Auth::user()->company()->companyPass)){
+            $profile = $user->profile();
 
-        if(($user->post())==3){
-            $profile->post=2;
-            $profile->save();
-        }
+            if(($user->post())==2){
+                $profile->post=1;
+                $profile->save();
+            }
+
+            if(($user->post())==3){
+                $profile->post=2;
+                $profile->save();
+            }
         
-        if(($user->post())==4){
-            $profile->post=3;
-            $profile->save();
+            if(($user->post())==4){
+                $profile->post=3;
+                $profile->save();
+            }
+            
+
+            return redirect (route('users.show',[
+                'user' => $user,
+            ]));
         }
 
-        return redirect(route('users.show',[
-            'user' => $user->id,
-        ]));
+        return back();
     }
 
     public function teams($id)
@@ -401,6 +417,52 @@ class UserController extends Controller
             'user' => $user,
             'teams' => $teams,
         ]);
+    }
+
+    public function personnel($id)
+    {
+        $user =User::find($id);
+
+        if(\Auth::user()->authority()){
+            return view('user.personnel',[
+                'user' => $user,
+            ]);
+        }
+
+        return redirect (route('users.show',[
+            'user' => $user,
+        ]));
+    }
+
+    public function preRetirement ($userId)
+    {
+        $user = User::find($userId);
+
+        return view('user.retirement',[
+            'user' => $user,
+        ]);
+    }
+
+    public function retirement (Request $request, $userId)
+    {
+        $user = User::find($userId);
+
+        if(($request->password)==(\Auth::user()->company()->companyPass)){
+            $profile = $user->profile();
+            $profile->companyId = null;
+            $profile->post = 0;
+            $profile->save();
+
+        return redirect (route('users.show',[
+            'user' => \Auth::user(),
+        ]));
+
+        }
+
+        return redirect (route('users.show',[
+            'user' => $user,
+        ]));
+
     }
 }
 

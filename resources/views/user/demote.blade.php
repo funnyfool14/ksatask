@@ -1,7 +1,7 @@
 @extends('commons.layouts')
 @include('commons.navbar')
 @section('content')
-<div class = "centering">
+<div class = "text-center mt-5">
     @if($user->leader())
     <h4>{{$user->firstName.' '.$user->lastName.' をリーダーから降格しますか？'}}</h4>
     @elseif($user->manager())
@@ -10,15 +10,19 @@
     <h4>{{$user->firstName.' '.$user->lastName.' の人事権限をなくしますか？'}}</h4>
     @endif
 </div>
-<div class = "row mt-4">
-    <div class = "offset-sm-3 col-sm-3">
-        {{link_to_route('users.demote','はい',['id'=>$user->id],['class'=>'btn btn-block btn-danger'])}}
-        {{--<form method="POST" action="{{route('users.promote',['id'=>$user->id])}}" enctype="multipart/form-data">
+@include('user.tasks')
+<form method="POST" action="{{route('users.demote',['id'=>$user->id])}}" enctype="multipart/form-data">
         @csrf
-            <button type="submit" class='btn btn-success btn-block'>はい</button>
-        </form>--}}
-    </div>
-    <div class = "col-sm-3 ml-2">
+        <div class = "mt-5 row">
+            <div class="offset-sm-2 col-sm-6 mb-4">
+                <input type="text" class="form-control" name="password" value="ユーザのログインパスワード">
+            </div>
+            <div class = "col-sm-2">
+                <button type="submit" class='btn btn-danger btn-block'>はい</button>
+            </div>
+        </div>
+    </form>
+    <div class = "offset-sm-4 col-sm-4">
         {{link_to_route('users.show','いいえ',[$user->id],['class'=>'btn btn-block btn-success'])}}
     </div>
 </div>

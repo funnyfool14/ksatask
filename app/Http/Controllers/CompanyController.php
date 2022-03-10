@@ -81,10 +81,11 @@ class CompanyController extends Controller
 
     public function belong(Request $request)
     {
+        $id = $request->companyName;
         $pass = $request->companyPass;
         $user = \Auth::user();
 
-        if(Company::where('companyPass',$pass)->first()){
+        if(Company::where('companyName',$id)->where('companyPass',$pass)->first()){
             $company = Company::where('companyPass',$pass)->first();
             $profile = $user->profile();
             $profile->companyId = $company->id;
@@ -93,6 +94,7 @@ class CompanyController extends Controller
 
             return redirect (route('users.top'));
         }
+        
         return view ('company.rechoice');
     }
 

@@ -19,12 +19,14 @@ Route::group(['middleware'=>['auth']],function(){
     Route::get('search','UserController@search')->name('users.search');
     Route::get('user/private/{id}','UserController@private')->name('users.private');
     Route::get('user/deadline/{id}','UserController@deadline')->name('users.deadline');
-    Route::get('user/{id}/prePromote','UserController@prePromote')->name('users.prePromote');
-    Route::get('user/{id}/preDemote','UserController@preDemote')->name('users.preDemote');
-    Route::get('user/{id}/promote','UserController@promote')->name('users.promote');
-    //Route::post('user/{id}/promote','UserController@promote')->name('users.promote');
-    Route::get('user/{id}/demote','UserController@demote')->name('users.demote');
     Route::get('user/{id}/teams','UserController@teams')->name('users.teams');
+    Route::get('user/{id}/personnel','UserController@personnel')->name('users.personnel');
+    Route::get('user/{id}/promote','UserController@prePromote')->name('users.prePromote');
+    Route::get('user/{id}/demote','UserController@preDemote')->name('users.preDemote');
+    Route::post('user/{id}/promote','UserController@promote')->name('users.promote');
+    Route::post('user/{id}/demote','UserController@demote')->name('users.demote');
+    Route::get('user/{id}/retirement','UserController@preRetirement')->name('users.preRetirement');
+    Route::post('user/{id}/retirement','UserController@retirement')->name('users.retirement');
 
     Route::resource('companies','CompanyController');
     Route::get('companiesBelong','CompanyController@choice')->name('companies.choice');
@@ -56,6 +58,8 @@ Route::group(['middleware'=>['auth']],function(){
     Route::put('team/{id}/taskUpdate','TaskController@teamUpdate')->name('tasks.teamUpdate');
     Route::post('inChargeOfTask/{id}/','TaskController@inCharge')->name('tasks.inCharge');
     Route::get('task/{task}/user/{user}','TaskController@remove')->name('tasks.remove');
+    Route::get('task/{task}/delete}','TaskController@preDelete')->name('tasks.preDelete');
+    Route::post('task/{task}/delete}','TaskController@delete')->name('tasks.delete');
 
     Route::resource('messages','MessageController');
     Route::get('messageTo/{user}','MessageController@write')->name('messages.write');

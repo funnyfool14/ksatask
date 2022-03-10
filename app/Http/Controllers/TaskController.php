@@ -196,10 +196,9 @@ class TaskController extends Controller
 
         if($member){
             if($member->notInChargeOf($taskId)){
-            $member->makeTask($task);
+                $member->makeTask($task);
             }
         }
-        
         return view('team.continueTask',[
             'task' => $task,
         ]);
@@ -221,8 +220,40 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function preDelete($id)
     {
-        //
+        $task = Task::find($id);
+
+        return view ('task.delete',[
+            'task' => $task,
+        ]);
+    }
+
+    public function delete(Request $request, $taskId)
+    {
+        $task = Task::find($taskId);
+        
+        if(($request->email)==(\Auth::user()->email)){
+            if($task->teamId){
+                $team = Team::find($task->teamId);
+                
+                $task->delete();
+
+                return redirect(route('teams.show',[
+                    'id' => $team->id,
+                ]));
+            }
+
+            $task->delete();
+
+            return redirect(route('users.show',[
+                'user' => \Auth::user(),
+            ]));
+        }
+
+        return redirect (route('tasks.show',[
+            'task' => $task,
+        ]));
+
     }
 }

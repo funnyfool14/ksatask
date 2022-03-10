@@ -9,7 +9,7 @@
     @include('user.indexButton')
     @include('task.graph')
     @if(Auth::user()->superior())
-    @include('project.createButton')
+        @include('project.createButton')
     @endif
 </div>
 @if(($user->id)==(Auth::id()))

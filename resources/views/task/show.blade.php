@@ -51,10 +51,6 @@
         @endif
     </div>
     <div class = 'row mt-4'>
-        <a class = 'col-sm-3'>詳細</a>
-        <h2>{!!$task->detail!!}</h3>
-    </div>
-    <div class = 'row mt-4'>
         <a class = 'col-sm-3'>公開レベル</a>
         @if(($task->private)=='public')
         <h3>公開</h3>

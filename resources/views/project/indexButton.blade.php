@@ -9,7 +9,7 @@
     </div>
 </div>
 @endif
-@if((Auth::user())==($project->manager()))
+@if((Auth::user())==($project->manager())|(Auth::user())->authority())
 <div class="row mb-5">
 <div class="offset-sm-2 col-sm-4 ">
     {!!link_to_route('teams.ready','チーム作成',['id' => $project->id],['class'=>'btn btn-success btn-block'])!!}

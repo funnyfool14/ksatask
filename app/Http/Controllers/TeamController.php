@@ -58,11 +58,17 @@ class TeamController extends Controller
     {
         $team = Team::find($teamId);
         $users = \Auth::user()->company()->lowly();
-
-        $members = $team->membersLeader();
+        
+        $superiors = $team->superiors();
+        $members = $team->lowlyMembers();
+        /*$members = $team->membersLeader();
         if($team->deputy){
             $members = $team->membersDeputy();
         };
+        if($team->superiors()){
+            $superiors = $team->superiors();
+        }*/
+
         
         if($team->tasks()->get()){
             
@@ -80,6 +86,7 @@ class TeamController extends Controller
                 'users' => $users,
                 'team' => $team,
                 'members' =>$members,
+                'superiors' => $superiors,
                 'highlowTasks' => $highlowTasks,
                 'highmidTasks' => $highmidTasks,
                 'highhighTasks' => $highhighTasks,
@@ -96,6 +103,7 @@ class TeamController extends Controller
             'users' => $users,
             'team' => $team,
             'members' =>$members,
+            'superiors' => $superiors,
         ]);
     }
 
@@ -178,7 +186,7 @@ class TeamController extends Controller
     public function edit($id)
     {
         $team = Team::find($id);
-        $users = \Auth::user()->company()->users();
+        $users = \Auth::user()->company()->leaders();
 
         return view ('team.edit',[
         'team' => $team,

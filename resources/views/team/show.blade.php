@@ -16,7 +16,7 @@
 <div class = "">
     @include('task.graph')
 </div>
-@if((Auth::user())==($team->project()->manager()))
+@if((Auth::user())==($team->project()->manager())|(Auth::user())->authority())
     <div class = "offset-sm-4 col-sm-4 mt-4">
         {{link_to_route('teams.edit','チーム編集',['id'=>$team->id],['class' => 'btn btn-primary btn-block'])}}
     </div>
