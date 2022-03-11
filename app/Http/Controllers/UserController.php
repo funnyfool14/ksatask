@@ -9,6 +9,9 @@ use \App\User;
 use \App\Task;
 use \App\Profile;
 use Request as UserRequest;
+use \App\Message;
+use Mail;
+use \App\Mail\SendMessage;
 
 class UserController extends Controller
 {
@@ -34,6 +37,7 @@ class UserController extends Controller
             $lowmidTasks = $user->tasks()->public()->lowmid()->paginate(4,['*'],'lowmid')->appends( ['highlow' => PostRequest::input('highlow') , 'highmid' => PostRequest::input('highmid') , 'highhigh' => PostRequest::input('highhigh') , 'midlow' => PostRequest::input('midlow') , 'midmid' => PostRequest::input('midmid') , 'midhigh' => PostRequest::input('midhigh') , 'lowlow' => PostRequest::input('lowlow') , 'lowmid' => PostRequest::input('lowmid') , 'lowhigh' => PostRequest::input('lowhigh')]);
             $lowhighTasks = $user->tasks()->public()->lowhigh()->paginate(4,['*'],'lowhigh')->appends( ['highlow' => PostRequest::input('highlow') , 'highmid' => PostRequest::input('highmid') , 'highhigh' => PostRequest::input('highhigh') , 'midlow' => PostRequest::input('midlow') , 'midmid' => PostRequest::input('midmid') , 'midhigh' => PostRequest::input('midhigh') , 'lowlow' => PostRequest::input('lowlow') , 'lowmid' => PostRequest::input('lowmid') , 'lowhigh' => PostRequest::input('lowhigh')]);
             //}
+
             return view ('user.show',[
                 'user' => $user, 
                 'users' => $users,
@@ -337,40 +341,78 @@ class UserController extends Controller
     public function promote(Request $request, $userId)
     {
         $user = User::find($userId);
-
-        if(($request->password)==(\Auth::user()->company()->companyPass)){
-
-            $profile = $user->profile();
-
-            if(($user->post())==1){
-                $profile->post=2;
-                $profile->save();
-
-            return redirect(route('users.show',[
-                'user' => $user->id,
-                ]));
-            }
-
-            if(($user->post())==2){
-                $profile->post=3;
-                $profile->save();
-            
-                return redirect(route('users.show',[
-                    'user' => $user->id,
-                ]));
-            }
         
-            if(($user->post())==3){
-                $profile->post=4;
-                $profile->save();
-            
+        if(\Auth::user()->authority()){
+            if(($request->password)==(\Auth::user()->company()->companyPass)){
+
+                $profile = $user->profile();
+
+                if(($user->post())==1){
+                    $profile->post=2;
+                    $profile->save();
+        
+                    $message = new Message;
+                    $message->sender = $user->company()->owner;
+                    $message->reciever = $userId;
+                    $message->subject = '昇格のお知らせ';
+                    $message->sentence = '本日より'.$user->firstName.' '.$user->lastName.' さんの一般社員の任を解きリーダーに昇格としました。';
+                    $message->status = "unread";
+        
+                    $message->save();
+        
+                    $reciever = User::find($message->reciever);
+                    Mail::to($reciever->email)->send(new SendMessage($message));
+
                 return redirect(route('users.show',[
                     'user' => $user->id,
-                ]));
+                    ]));
+                }
+
+                if(($user->post())==2){
+                    $profile->post=3;
+                    $profile->save();
+        
+                    $message = new Message;
+                    $message->sender = $user->company()->owner;
+                    $message->reciever = $userId;
+                    $message->subject = '昇格のお知らせ';
+                    $message->sentence = '本日より'.$user->firstName.' '.$user->lastName.' さんのリーダーの任を解きマネージャーに昇格としました。';
+                    $message->status = "unread";
+        
+                    $message->save();
+        
+                    $reciever = User::find($message->reciever);
+                    Mail::to($reciever->email)->send(new SendMessage($message));
+            
+                    return redirect(route('users.show',[
+                        'user' => $user->id,
+                    ]));
+                }
+        
+                if(($user->post())==3){
+                    $profile->post=4;
+                    $profile->save();
+        
+                    $message = new Message;
+                    $message->sender = $user->company()->owner;
+                    $message->reciever = $userId;
+                    $message->subject = '昇格のお知らせ';
+                    $message->sentence = '本日より'.$user->firstName.' '.$user->lastName.' さんに人事権をお渡しします。';
+                    $message->status = "unread";
+        
+                    $message->save();
+        
+                    $reciever = User::find($message->reciever);
+                    Mail::to($reciever->email)->send(new SendMessage($message));
+            
+                    return redirect(route('users.show',[
+                        'user' => $user->id,
+                    ]));
+                }
             }
 
             return redirect (route('users.show',[
-                'user' => $user,
+                'user' => $user->id,
             ]));
         }
 

@@ -19,6 +19,7 @@ class Messages extends Migration
             $table->unsignedBigInteger('reciever');
             $table->text('subject');
             $table->text('sentence');
+            $table->text('before')->nullable();
             $table->string('status')->defalt('unread');
             $table->timestamps();
 

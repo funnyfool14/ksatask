@@ -41,6 +41,10 @@ class MessageController extends Controller
     }
 
     public function sendCheck(Request $request , $id){
+        $request->validate([
+            'subject'=>'required',
+            'sentence'=>'required',
+        ]);
 
         $reciever = User::find($id);
     	$message = new Message;
@@ -68,14 +72,29 @@ class MessageController extends Controller
         return redirect (route('messages.index'));
     }
 
+    public function unsent($messageId)
+    {
+        $message = Message::find($messageId);
+        $message->status ='unsent';
+        $message->save();
+
+        return redirect (route('messages.index'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function reply($messageId)
     {
-        //
+        $message = Message::find($messageId);
+        $sender = User::find($message->sender);
+        
+        return view ('message.reply',[
+            'message' => $message,
+            'sender' => $sender,
+        ]);
     }
 
     /**
@@ -84,9 +103,30 @@ class MessageController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    { 
-        //
+    
+    public function replyCheck(Request $request , $messageId){
+
+        $request->validate([
+            'subject'=>'required',
+            'sentence'=>'required',
+        ]);
+
+        $beforeMessage = Message::find($messageId);
+    	$message = new Message;
+
+        $message->sender = \Auth::id();
+        $message->reciever = $beforeMessage->sender;
+        $message->subject = $request->subject;
+        $message->sentence = $request->sentence;
+        //$message->before = $messageId;
+        $message->status = "unread";
+
+        $message->save();
+
+        return view ('message.replyCheck',[
+            'message' => $message,
+            'beforeMessage' => $beforeMessage,
+        ]);
     }
 
     /**
@@ -97,7 +137,20 @@ class MessageController extends Controller
      */
     public function show($id)
     {
-        //
+        $message = Message::find($id);
+        $reciever= User::find($message->reciever);
+        $sender = User::find($message->sender);
+        IF((\Auth::user())==$reciever){
+            $message->status = 'read';
+            $message->save();
+        }
+
+        return view ('message.show',[
+            'message' => $message,
+            'reciever' => $reciever,
+            'sender' => $sender,
+        ]);
+
     }
 
     /**
@@ -108,7 +161,10 @@ class MessageController extends Controller
      */
     public function edit($id)
     {
-        //
+        $message = Message::find($id);
+        return view ('message.edit',[
+            'message' => $message,
+        ]);
     }
 
     /**
@@ -120,7 +176,17 @@ class MessageController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $message = Message::find($id);
+        
+        $message->subject = $request->subject;
+        $message->sentence = $request->sentence;
+        $message->status = 'unread';
+
+        $message->save();
+
+        return view ('message.sendCheck',[
+            'message' => $message,
+        ]);
     }
 
     /**

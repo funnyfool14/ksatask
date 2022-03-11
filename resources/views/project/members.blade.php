@@ -39,7 +39,7 @@
                 @if(($member->profile()->post)==2)
                     @if($project->notLeaders($member->id))
                     <div class = "row">
-                        <h4 class = "mt-2 col-sm-4">{{link_to_route('users.show',$member->firstName.' '.$member->lastName,[$leader->id],[])}}</h4>
+                        <h4 class = "mt-2 col-sm-4">{{link_to_route('users.show',$member->firstName.' '.$member->lastName,[$member->id],[])}}</h4>
                         @if((Auth::id())==($project->manager))
                         <div class = "col-sm-2">
                             {{link_to_route('projects.remove','プロジェクトから外す',['project'=>$project->id,'user'=>$member->id],['class'=>'btn btn-danger btn-block btn-sm'])}}
@@ -53,7 +53,7 @@
             @foreach($members as $member)
                 @if(($member->profile()->post)==1)
                     <div class = "row">
-                        <h4 class = "mt-2 col-sm-4">{{link_to_route('users.show',$member->firstName.' '.$member->lastName,[$leader->id],[])}}</h4>
+                        <h4 class = "mt-2 col-sm-4">{{link_to_route('users.show',$member->firstName.' '.$member->lastName,[$member->id],[])}}</h4>
                         @if((Auth::id())==($project->manager))
                         <div class = "col-sm-2">
                             {{link_to_route('projects.remove','プロジェクトから外す',['project'=>$project->id,'user'=>$member->id],['class'=>'btn btn-danger btn-block btn-sm'])}}

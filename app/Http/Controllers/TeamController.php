@@ -8,7 +8,10 @@ use App\Project;
 use App\Team;
 use App\User;
 use App\Task;
+use App\Message;
 use \DB;
+use Mail;
+use \App\Mail\SendMessage;
 
 class TeamController extends Controller
 {
@@ -113,6 +116,18 @@ class TeamController extends Controller
         if(DB::table('teamsUsers')->where('teamId',$teamId)->where('userId',$request->userId)->doesntExist()){
             $team->members()->attach($request->userId);
         };
+        
+        $message = new Message;
+        $message->sender = $team->project()->manager;
+        $message->reciever = $request->userId;
+        $message->subject = $team->teamName;
+        $message->sentence = $team->project()->projectName.'の'.$team->teamName.'に召集しました。　担当者からの連絡をお待ちください。';
+        $message->status = "unread";
+
+        $message->save();
+
+        $reciever = User::find($message->reciever);
+        Mail::to($reciever->email)->send(new SendMessage($message));
 
         return redirect(route('teams.show',[
             'id' => $teamId,

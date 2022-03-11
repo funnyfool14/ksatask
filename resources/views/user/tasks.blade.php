@@ -3,7 +3,7 @@
         <a>{{'参加チーム'}}</a>
         @foreach($user->team()->get() as $team)
             <h4 class = "mt-2">{{$team->teamName}}</h4>
-                @if($team->userTasks($user->id))
+                @if(count($team->userTasks($user->id))>=1)
                 <a class = "mt-3">{{'担当タスク'}}</a>
                 <div class ="row justify-content-center mt-2">
                     @foreach($team->userTasks($user->id) as $task)

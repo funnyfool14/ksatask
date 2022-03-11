@@ -8,9 +8,9 @@
     </div>
     <div class="offset-sm-2 mt-4 col-sm-8">
         @if((Auth::id())==($user->id))
-        {!!link_to_route('messages.index','メール',[],['class'=>'btn btn-outline-primary btn-block'])!!}
+            {!!link_to_route('messages.index','メール',[],['class'=>'btn btn-outline-primary btn-block btn-lg'])!!}
         @else
-        {!!link_to_route('messages.write','メール',['user'=>$user->id],['class'=>'btn btn-outline-info btn-block btn-lg'])!!}
+            {!!link_to_route('messages.write','メール',['user'=>$user->id],['class'=>'btn btn-outline-info btn-block btn-lg'])!!}
         @endif
     </div>
     <div class="offset-sm-2 mt-5 mt-5 col-sm-8">

@@ -17,6 +17,7 @@ class Companies extends Migration
             $table->bigIncrements('id');
             $table->string('companyName',30);
             $table->string('companyPass')->unique();
+            $table->string('personnelPass');
             $table->unsignedInteger('owner');
             $table->timestamps();
         });

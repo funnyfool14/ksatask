@@ -63,8 +63,11 @@ Route::group(['middleware'=>['auth']],function(){
 
     Route::resource('messages','MessageController');
     Route::get('messageTo/{user}','MessageController@write')->name('messages.write');
+    Route::get('replyTo/{message}}','MessageController@reply')->name('messages.reply');
+    Route::post('replyTo/{id}', 'MessageController@replyCheck')->name('messages.replyCheck');
     Route::post('send/{id}', 'MessageController@sendCheck')->name('messages.sendCheck');
     Route::get('send/{id}', 'MessageController@send')->name('messages.send');
+    Route::get('unsent/{id}', 'MessageController@unsent')->name('messages.unsent');
     Route::get('test', 'MessageController@test');
 });
 
