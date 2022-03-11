@@ -452,6 +452,8 @@ class UserController extends Controller
             $profile->companyId = null;
             $profile->post = 0;
             $profile->save();
+            
+            $user->tasks()->detach();
 
         return redirect (route('users.show',[
             'user' => \Auth::user(),
