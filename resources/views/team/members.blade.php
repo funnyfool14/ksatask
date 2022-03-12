@@ -27,7 +27,7 @@
         <div class = "row">
             <h3 class='offset-sm-1 col-sm-6'>{!!link_to_route('users.show',$superior->firstName.' '.$superior->lastName,[$superior->id],[])!!}</h3>
             <div class = 'mt-2 col-sm-4'>
-                @if((Auth::user())->authority())
+                @if(($team->leader)==Auth::id()|($team->project()->manager())==Auth::user())
                 {{link_to_route('teams.remove','チームから外す',['team'=>$team->id,'user'=>$superior->id],['class'=>'btn btn-danger btn-bock btn-sm'])}}
                 @endif
             </div>

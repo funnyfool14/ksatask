@@ -8,6 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use App\Team;
 use App\Task;
 use DB;
+use Request as PostRequest;
 
 class User extends Authenticatable
 {
@@ -73,7 +74,7 @@ class User extends Authenticatable
 
     public function sentMessages()
     {
-        $messages = $this->hasMany(Message::class,'sender')->get();
+        $messages = $this->hasMany(Message::class,'sender')->orderBy('id', 'desc')->paginate(7,['*'],'sentMessages')->appends(['recievedMessages' => PostRequest::input('recievedMessages'),'sentMessages' => PostRequest::input('sentMessages')]);
         
         if(($messages->count())>0){
             return $messages;
@@ -83,7 +84,8 @@ class User extends Authenticatable
 
     public function recievedMessages()
     {
-        $messages = $this->hasMany(Message::class,'reciever')->get();
+        $messages = $this->hasMany(Message::class,'reciever')->orderBy('id', 'desc')->paginate(7,['*'],'recirvedMessages')->appends(['recievedMessages' => PostRequest::input('recievedMessages'),'sentMessages' => PostRequest::input('sentMessages')]);
+        
         if(($messages->count())>0){
             return $messages;
         }

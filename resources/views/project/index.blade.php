@@ -22,4 +22,7 @@
     </div>
 </div>
 @endforeach
+@if(Auth::user()->authority())
+    @include('project.createButton')
+@endif
 @endsection('content')

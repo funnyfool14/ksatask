@@ -11,6 +11,11 @@ use \App\User;
 use \App\Task;
 use \App\Profile;
 use \DB;
+use \App\Message;
+use Mail;
+use \App\Mail\SendMessage;
+
+
 class ProjectController extends Controller
 {
     /**
@@ -73,12 +78,20 @@ class ProjectController extends Controller
             $project->detail = $request->detail;
             $project->save();
 
-            $users = $company->users();
-
-            /*return view ('project.show',[
-                'project' => $project,
-                'users' => $users,
-            ]);*/
+            $user = User::find($request->manager);
+        
+            $message = new Message;
+            $message->sender = \Auth::id();
+            $message->reciever = $request->manager;
+            $message->subject = 'プロジェクトマネージャー任命';
+            $message->sentence = $user->firstName.' '.$user->lastName.' さんを'.$project->projectName.' のプロジェクトマネージャーに任命しました。プロジェクト画面から、チームの編成をしてください。';
+            $message->status = "unread";
+    
+            $message->save();
+    
+            $reciever = User::find($message->reciever);
+            Mail::to($reciever->email)->send(new SendMessage($message));
+            
             return redirect(route('projects.show',[
                 'project' => $project->id,
             ]));

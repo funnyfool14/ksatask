@@ -22,6 +22,7 @@
         </div>
     </div>
     @endforeach
+    {{$recievedMessages->links()}}
 @endif
 @if($sentMessages)
     <h4 class ="mt-3 ml-2">{{'送信メール'}}</h4>
@@ -40,6 +41,7 @@
         </div>
     </div>
     @endforeach
+    {{$sentMessages->links()}}
 @endif
 @if(!($recievedMessages)&&!($sentMessages))
 <div class = "centering">

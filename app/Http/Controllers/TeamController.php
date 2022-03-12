@@ -12,6 +12,7 @@ use App\Message;
 use \DB;
 use Mail;
 use \App\Mail\SendMessage;
+use LDAP\Result;
 
 class TeamController extends Controller
 {
@@ -40,6 +41,22 @@ class TeamController extends Controller
         $team->save();
 
         $team->members()->attach($team->leader);
+
+        $user = User::find($request->leader);
+
+        if($user!=($team->project()->manager())){
+            $message = new Message;
+            $message->sender = \Auth::id();
+            $message->reciever = $request->leader;
+            $message->subject = 'チームリーダー任命';
+            $message->sentence = $user->firstName.' '.$user->lastName.' さんを'.$team->project()->projectName.'プロジェクトの'.$team->teamName.' のチームリーダーに任命しました。チーム画面からメンバーを組織しタスクを立ててください。';
+            $message->status = "unread";
+
+            $message->save();
+
+            $reciever = User::find($message->reciever);
+            Mail::to($reciever->email)->send(new SendMessage($message));
+        }
         
         return redirect(route('teams.show',[
             'id' => $team->id,
@@ -117,11 +134,13 @@ class TeamController extends Controller
             $team->members()->attach($request->userId);
         };
         
+        $user = User::find($request->userId);
+
         $message = new Message;
         $message->sender = $team->project()->manager;
         $message->reciever = $request->userId;
         $message->subject = $team->teamName;
-        $message->sentence = $team->project()->projectName.'の'.$team->teamName.'に召集しました。　担当者からの連絡をお待ちください。';
+        $message->sentence = $user->firstName.' '.$user->lastName.' さんを'.$team->project()->projectName.'の'.$team->teamName.'に召集しました。　詳細は追って連絡します。';
         $message->status = "unread";
 
         $message->save();
@@ -151,6 +170,22 @@ class TeamController extends Controller
 
         $team->deputy = $request->deputy;
         $team->save();
+
+        $user = User::find($request->deputy);
+
+        if($user!=($team->project()->manager())){
+            $message = new Message;
+            $message->sender = \Auth::id();
+            $message->reciever = $request->deputy;
+            $message->subject = 'サブリーダー任命';
+            $message->sentence = $user->firstName.' '.$user->lastName.' さんを'.$team->project()->projectName.'プロジェクトの'.$team->teamName.' のサブリーダーに任命しました。';
+            $message->status = "unread";
+
+            $message->save();
+
+            $reciever = User::find($message->reciever);
+            Mail::to($reciever->email)->send(new SendMessage($message));
+        }
 
         return redirect(route('teams.show',[
             'id' => $team->id,
@@ -201,11 +236,13 @@ class TeamController extends Controller
     public function edit($id)
     {
         $team = Team::find($id);
-        $users = \Auth::user()->company()->leaders();
+        $leaders = \Auth::user()->company()->leaders();
+        $leader = User::where('id',$team->leader)->get();
+        $users = $leaders->diff($leader);
 
         return view ('team.edit',[
         'team' => $team,
-        'users' => $users
+        'users' => $users,
         ]);
     }
 
@@ -220,14 +257,29 @@ class TeamController extends Controller
         $team->leader = $request->leader;
         $team->save();
 
+        $user = User::find($request->leader);
+
+        if($user!=($team->project()->manager())){
+            $message = new Message;
+            $message->sender = \Auth::id();
+            $message->reciever = $request->leader;
+            $message->subject = 'チームリーダー任命';
+            $message->sentence = $user->firstName.' '.$user->lastName.' さんを'.$team->project()->projectName.'プロジェクトの'.$team->teamName.' のチームリーダーに任命しました。チーム画面からメンバーを組織しタスクを立ててください。';
+            $message->status = "unread";
+
+            $message->save();
+
+            $reciever = User::find($message->reciever);
+            Mail::to($reciever->email)->send(new SendMessage($message));
+        }
         if($team->members()->where('userId',$team->leader)->doesntExist()){
             $team->members()->attach($team->leader);
         }
-        if($team->deputy){
+        /*if($team->deputy){
             if($team->members()->where('userId',$team->deputy)->doesntExist()){
                 $team->members()->attach($team->deputy);
             }
-        }
+        }*/
         
         return redirect(route('teams.show',[
             'id' => $team->id,

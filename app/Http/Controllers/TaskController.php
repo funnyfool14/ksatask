@@ -7,6 +7,9 @@ use App\Task;
 use App\User;
 use App\team;
 use DB;
+use \App\Message;
+use Mail;
+use \App\Mail\SendMessage;
 
 class TaskController extends Controller
 {
@@ -58,9 +61,6 @@ class TaskController extends Controller
         $task->save();
 
         $user->makeTask($task);
-
-
-        \Log::debug('タスクの登録');
 
         return redirect(route('users.top'));
     }
@@ -193,12 +193,27 @@ class TaskController extends Controller
     {
         $member = User::find($request->memberId);
         $task = Task::find($taskId);
+        $team = Team::find($task->teamId);
 
         if($member){
             if($member->notInChargeOf($taskId)){
                 $member->makeTask($task);
             }
+            if(\Auth::user()!=$member){
+                $message = new Message;
+                $message->sender = \Auth::id();
+                $message->reciever = $request->memberId;
+                $message->subject = '担当タスクの追加';
+                $message->sentence = $team->teamName.' の'.$task->title.' が'.$member->firstName.' '.$member->lastName.' さんに振り分けられました。';
+                $message->status = "unread";
+
+                $message->save();
+
+                $reciever = User::find($message->reciever);
+                Mail::to($reciever->email)->send(new SendMessage($message));
+            }
         }
+
         return view('team.continueTask',[
             'task' => $task,
         ]);

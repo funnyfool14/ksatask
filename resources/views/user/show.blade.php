@@ -8,9 +8,6 @@
 <div class = ''>
     @include('user.indexButton')
     @include('task.graph')
-    @if(Auth::user()->superior())
-        @include('project.createButton')
-    @endif
 </div>
 @if(($user->id)==(Auth::id()))
 <div class = ''>
