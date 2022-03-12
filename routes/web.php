@@ -33,6 +33,8 @@ Route::group(['middleware'=>['auth']],function(){
     Route::post('companiesBelong','CompanyController@belong')->name('companies.belong');
 
     Route::resource('projects','ProjectController');
+    Route::get('delete/{project}','ProjectController@preDelete')->name('projects.preDelete');
+    Route::post('delete/{project}','ProjectController@delete')->name('projects.delete');
     Route::get('project_teams/{id}','ProjectController@teams')->name('projects.teams');
     Route::get('project/members/{id}','ProjectController@members')->name('projects.members');
     Route::get('project/{project}/user/{user}','ProjectController@remove')->name('projects.remove');
@@ -51,6 +53,8 @@ Route::group(['middleware'=>['auth']],function(){
     Route::get('team/{team}/user/{user}','TeamController@remove')->name('teams.remove');
     Route::get('team/{id}/edit','TeamController@edit')->name('teams.edit');
     Route::put('team/{id}/edit','TeamController@update')->name('teams.update');
+    Route::get('team/{id}/delete','TeamController@preDelete')->name('teams.preDelete');
+    Route::post('team/{id}/delete','TeamController@delete')->name('teams.delete');
 
     Route::resource('tasks','TaskController');
     Route::get('team/{id}/taskCreate','TaskController@teamCreate')->name('tasks.teamCreate');

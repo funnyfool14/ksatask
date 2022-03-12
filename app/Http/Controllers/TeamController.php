@@ -285,4 +285,33 @@ class TeamController extends Controller
             'id' => $team->id,
         ]));
     }
+
+    public function preDelete($teamId)
+    {
+        $team = Team::find($teamId);
+
+        return view ('team.delete',[
+            'team' => $team,
+        ]);
+    }
+
+    public function delete(Request $request, $teamId)
+    {
+        $team = Team::find($teamId);
+        
+        if(($request->email)==(\Auth::user()->email)){
+                $team->delete();
+
+            $team->delete();
+
+            return redirect(route('projects.show',[
+                'project' => $team->project(),
+            ]));
+        }
+
+        return redirect (route('teams.show',[
+            'team' => $team,
+        ]));
+
+    }
 }

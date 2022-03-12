@@ -1,6 +1,13 @@
 @extends('commons.layouts')
 @include('commons.navbar')
 @section('content')
+<div class = "offset-sm-9 col-sm-3">
+    @if(Auth::user()->authority())
+        @if(count($project->tasks()->get())==0)
+            {{link_to_route('projects.preDelete','プロジェクトを削除する',['project'=>$project->id],['class'=>'btn btn-secondary btn-block btn-sm'])}}
+        @endif
+    @endif
+</div>
 <div class = "text-center">
     <h3>{{$project->projectName}}</h3>
 </div>

@@ -13,11 +13,13 @@
             {!!link_to_route('messages.write','メール',['user'=>$user->id],['class'=>'btn btn-outline-info btn-block btn-lg'])!!}
         @endif
     </div>
+    @if($user->team()->exists())
     <div class="offset-sm-2 mt-5 mt-5 col-sm-8">
         @if((Auth::user())->team())
         {!!link_to_route('users.teams','参加チーム',['id'=>$user->id],['class'=>'btn btn-success btn-block btn-lg'])!!}
         @endif
     </div>
+    @endif
     <div class = "offset-sm-2 col-sm-8 mt-5 mt-4">
         @if(Auth::user()->authority())
             @if(Auth::id()!=($user->id))

@@ -209,9 +209,32 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+
+    public function preDelete($projectId)
     {
-        //
+        $project = Project::find($projectId);
+
+        return view ('project.delete',[
+            'project' => $project,
+        ]);
+    }
+
+    public function delete(Request $request, $projectId)
+    {
+        $project = Project::find($projectId);
+
+        if(($request->email)==(\Auth::user()->email)){
+                
+            $project->delete();
+
+            return redirect(route('users.show',[
+                'user' => \Auth::user(),
+            ]));
+        }
+
+        return redirect (route('projects.show',[
+            'project' => $project,
+        ]));
     }
 
     public function members($id)
