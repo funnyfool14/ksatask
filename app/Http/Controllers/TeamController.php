@@ -49,7 +49,7 @@ class TeamController extends Controller
             $message->sender = \Auth::id();
             $message->reciever = $request->leader;
             $message->subject = 'チームリーダー任命';
-            $message->sentence = $user->firstName.' '.$user->lastName.' さんを'.$team->project()->projectName.'プロジェクトの'.$team->teamName.' のチームリーダーに任命しました。チーム画面からメンバーを組織しタスクを立ててください。';
+            $message->sentence = $user->firstName.' '.$user->lastName.' さんを'.$team->project()->projectName.'プロジェクトの'.$team->teamName." のチームリーダーに任命しました。\nチーム画面からメンバーを組織しタスクを立ててください。";
             $message->status = "unread";
 
             $message->save();
@@ -140,7 +140,7 @@ class TeamController extends Controller
         $message->sender = $team->project()->manager;
         $message->reciever = $request->userId;
         $message->subject = $team->teamName;
-        $message->sentence = $user->firstName.' '.$user->lastName.' さんを'.$team->project()->projectName.'の'.$team->teamName.'に召集しました。　詳細は追って連絡します。';
+        $message->sentence = $user->firstName.' '.$user->lastName." さんを\n".$team->project()->projectName.'プロジェクトの'.$team->teamName."に召集しました。\n詳細は追って連絡します。";
         $message->status = "unread";
 
         $message->save();
@@ -178,7 +178,7 @@ class TeamController extends Controller
             $message->sender = \Auth::id();
             $message->reciever = $request->deputy;
             $message->subject = 'サブリーダー任命';
-            $message->sentence = $user->firstName.' '.$user->lastName.' さんを'.$team->project()->projectName.'プロジェクトの'.$team->teamName.' のサブリーダーに任命しました。';
+            $message->sentence = $user->firstName.' '.$user->lastName." さんを\n".$team->project()->projectName.'プロジェクトの'.$team->teamName.' のサブリーダーに任命しました。';
             $message->status = "unread";
 
             $message->save();
@@ -264,7 +264,7 @@ class TeamController extends Controller
             $message->sender = \Auth::id();
             $message->reciever = $request->leader;
             $message->subject = 'チームリーダー任命';
-            $message->sentence = $user->firstName.' '.$user->lastName.' さんを'.$team->project()->projectName.'プロジェクトの'.$team->teamName.' のチームリーダーに任命しました。チーム画面からメンバーを組織しタスクを立ててください。';
+            $message->sentence = $user->firstName.' '.$user->lastName." さんを\n".$team->project()->projectName.'プロジェクトの'.$team->teamName." のチームリーダーに任命しました。\nチーム画面からメンバーを組織しタスクを立ててください。";
             $message->status = "unread";
 
             $message->save();

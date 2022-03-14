@@ -17,18 +17,21 @@
             <h3>{{$message->subject}}</h3>
         </div>
         <div class = "mt-5">
-            <h3>{{$message->sentence}}</h3>
+            <h3>{!!nl2br(e($message->sentence))!!}</h3>
         </div>
     </div>
     <div class = "offset-sm-4 col-sm-4 mt-5">
         @if(($message->sender)==Auth::id())
-            <h3>{{link_to_route('messages.edit','メールの作成',[$message->sender],['class'=>'btn btn-primary btn-block'])}}</h3>
-        @endif
-        @if(($message->reciever)==Auth::id())
+            @if(($message->status)=='unsent')
+            <h3>{{link_to_route('messages.edit','メールの編集',[$message->id],['class'=>'btn btn-primary btn-block'])}}</h3>
+            @else
+            <h3>{{link_to_route('messages.write','メールの作成',[$message->reciever],['class'=>'btn btn-primary btn-block'])}}</h3>
+            @endif
+        @elseif(($message->reciever)==Auth::id())
             <h3>{{link_to_route('messages.reply','メールの返信',['message' => $message->id],['class'=>'btn btn-primary btn-block'])}}</h3>
         @endif
     </div>
-    <div class="offset-sm-4 col-sm-4 mt-4">
+    <div class="offset-sm-4 col-sm-4 mt-4 mb-5">
         {!!link_to_route('messages.index','メールボックス',[],['class'=>'btn btn-outline-primary btn-block'])!!}
     </div>
 </div>

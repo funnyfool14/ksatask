@@ -66,4 +66,14 @@ class Task extends Model
     {
         return Team::find($this->teamId);
     }
+
+    public function owned($userId)
+    {
+        if(($this->inCharge()->where('userId',$userId)->exists())){
+            return true;
+        }
+        return false;
+    }
+
+
 }

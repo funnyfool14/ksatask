@@ -53,12 +53,14 @@ class CompanyController extends Controller
         $request->validate([
             'companyName'=>'required',
             'companyPass'=>'required|min:8',
+            'personnelPass'=>'required|min:8'
         ]);
 
         $company = new Company;
 
         $company->companyName = $request->companyName;
-        $company->companyPass= $request->companyPass;
+        $company->companyPass = $request->companyPass;
+        $company->personnelPass = $request->personnelPass;
         $company->owner = \Auth::id();
         $company->save();
 
@@ -67,9 +69,6 @@ class CompanyController extends Controller
         $profile->post = 5;
         $profile->companyId = $company->id;
         $profile->save();
-        
-
-        \Log::debug('会社を作成しプロフィール編集画面へ');
 
         return redirect (route('users.edit',[
             'company' => $company,
@@ -115,9 +114,13 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($companyId)
     {
-        
+        $company = Company::find($companyId);
+
+        return view ('company.edit',[
+            'company' => $company,
+        ]);
     }
 
     /**
@@ -127,9 +130,22 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $companyId)
     {
-        //
+        $request->validate([
+            'companyName'=>'required',
+            'companyPass'=>'required|min:8',
+            'personnelPass'=>'required|min:8',
+        ]);
+
+        $company = Company::find($companyId);
+
+        $company->companyName = $request->companyName;
+        $company->companyPass = $request->companyPass;
+        $company->personnelPass = $request->personnelPass;
+        $company->save();
+        
+        return redirect ('/');
     }
 
     /**

@@ -2,13 +2,13 @@
 @include('commons.navbar')
 @section('content')
 <div class='offset-sm-3 col-sm-6 mt-5'>
+    <div class = "text-center mt-4">
+        <h4>{{$project->projectName.' プロジェクト'}}</h4>
+    </div>
     <h3 class = 'text-center mt-3'>チーム作成</h3>
     <form method="POST" action="{{route('teams.leaderDecide',['id' => $project->id])}}" enctype="multipart/form-data">
     @csrf
     @method('POST')
-    <div class = "text-center mt-4">
-        <h4>{{$project->projectName}}</h4>
-    </div>
         <div class="form-group">
             <label for="projectName">チーム名</label>
             <input type="text" class="form-control" name="teamName" value="{{old('teamName')}}">
@@ -36,5 +36,8 @@
             <button type="submit" class='btn btn-primary btn-lg mt-5 col-sm-8'>チーム結成</button>
         </div> 
     </form>
+</div>
+<div class = "offset-sm-4 col-sm-4 mt-5 mt-5 mb-5">
+    {{link_to_route('projects.show','プロジェクトTOP',['project'=>$project->id],['class' => 'btn btn-outline-success btn-block'])}}
 </div>
 @endsection('content')

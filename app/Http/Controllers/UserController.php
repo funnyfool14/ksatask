@@ -92,7 +92,7 @@ class UserController extends Controller
         $user = User::find($id);
         $users = User::get();
         
-        if($user->tasks()->get()){
+        //if($user->tasks()->get()){
             $highlowTasks = $user->tasks()->public()->highlow()->paginate(4,['*'],'highlow')->appends( ['highlow' => PostRequest::input('highlow') , 'highmid' => PostRequest::input('highmid') , 'highhigh' => PostRequest::input('highhigh') , 'midlow' => PostRequest::input('midlow') , 'midmid' => PostRequest::input('midmid') , 'midhigh' => PostRequest::input('midhigh') , 'lowlow' => PostRequest::input('lowlow') , 'lowmid' => PostRequest::input('lowmid') , 'lowhigh' => PostRequest::input('lowhigh')]);
             $highmidTasks = $user->tasks()->public()->highmid()->paginate(4,['*'],'highmid')->appends( ['highlow' => PostRequest::input('highlow') , 'highmid' => PostRequest::input('highmid') , 'highhigh' => PostRequest::input('highhigh') , 'midlow' => PostRequest::input('midlow') , 'midmid' => PostRequest::input('midmid') , 'midhigh' => PostRequest::input('midhigh') , 'lowlow' => PostRequest::input('lowlow') , 'lowmid' => PostRequest::input('lowmid') , 'lowhigh' => PostRequest::input('lowhigh')]);
             $highhighTasks = $user->tasks()->public()->highhigh()->paginate(4,['*'],'highhigh')->appends( ['highlow' => PostRequest::input('highlow') , 'highmid' => PostRequest::input('highmid') , 'highhigh' => PostRequest::input('highhigh') , 'midlow' => PostRequest::input('midlow') , 'midmid' => PostRequest::input('midmid') , 'midhigh' => PostRequest::input('midhigh') , 'lowlow' => PostRequest::input('lowlow') , 'lowmid' => PostRequest::input('lowmid') , 'lowhigh' => PostRequest::input('lowhigh')]);
@@ -102,8 +102,11 @@ class UserController extends Controller
             $lowlowTasks = $user->tasks()->public()->lowlow()->paginate(4,['*'],'lowlow')->appends( ['highlow' => PostRequest::input('highlow') , 'highmid' => PostRequest::input('highmid') , 'highhigh' => PostRequest::input('highhigh') , 'midlow' => PostRequest::input('midlow') , 'midmid' => PostRequest::input('midmid') , 'midhigh' => PostRequest::input('midhigh') , 'lowlow' => PostRequest::input('lowlow') , 'lowmid' => PostRequest::input('lowmid') , 'lowhigh' => PostRequest::input('lowhigh')]);
             $lowmidTasks = $user->tasks()->public()->lowmid()->paginate(4,['*'],'lowmid')->appends( ['highlow' => PostRequest::input('highlow') , 'highmid' => PostRequest::input('highmid') , 'highhigh' => PostRequest::input('highhigh') , 'midlow' => PostRequest::input('midlow') , 'midmid' => PostRequest::input('midmid') , 'midhigh' => PostRequest::input('midhigh') , 'lowlow' => PostRequest::input('lowlow') , 'lowmid' => PostRequest::input('lowmid') , 'lowhigh' => PostRequest::input('lowhigh')]);
             $lowhighTasks = $user->tasks()->public()->lowhigh()->paginate(4,['*'],'lowhigh')->appends( ['highlow' => PostRequest::input('highlow') , 'highmid' => PostRequest::input('highmid') , 'highhigh' => PostRequest::input('highhigh') , 'midlow' => PostRequest::input('midlow') , 'midmid' => PostRequest::input('midmid') , 'midhigh' => PostRequest::input('midhigh') , 'lowlow' => PostRequest::input('lowlow') , 'lowmid' => PostRequest::input('lowmid') , 'lowhigh' => PostRequest::input('lowhigh')]);
+        //}
+
+        if(\Auth::id()==$user->id){
+            return redirect(route('users.top'));
         }
-            //storage::disk('local')->exists('public/storage/'.$user->pic);
             
         return view ('user.show',[
             'user' => $user, 
@@ -343,7 +346,7 @@ class UserController extends Controller
         $user = User::find($userId);
         
         if(\Auth::user()->authority()){
-            if(($request->password)==(\Auth::user()->company()->companyPass)){
+            if(($request->personnelPass)==(\Auth::user()->company()->personnelPass)){
 
                 $profile = $user->profile();
 
@@ -355,7 +358,7 @@ class UserController extends Controller
                     $message->sender = $user->company()->owner;
                     $message->reciever = $userId;
                     $message->subject = '昇格のお知らせ';
-                    $message->sentence = '本日より'.$user->firstName.' '.$user->lastName.' さんの一般社員の任を解きリーダーに昇格としました。';
+                    $message->sentence = '本日より'.$user->firstName.' '.$user->lastName." さんの\n一般社員の任を解きリーダーに昇格としました。";
                     $message->status = "unread";
         
                     $message->save();
@@ -376,7 +379,7 @@ class UserController extends Controller
                     $message->sender = $user->company()->owner;
                     $message->reciever = $userId;
                     $message->subject = '昇格のお知らせ';
-                    $message->sentence = '本日より'.$user->firstName.' '.$user->lastName.' さんのリーダーの任を解きマネージャーに昇格としました。';
+                    $message->sentence = '本日より'.$user->firstName.' '.$user->lastName." さんの\nリーダーの任を解きマネージャーに昇格としました。";
                     $message->status = "unread";
         
                     $message->save();
@@ -423,7 +426,7 @@ class UserController extends Controller
     {
         $user = User::find($userId);
 
-        if(($request->password)==(\Auth::user()->company()->companyPass)){
+        if(($request->personnelPass)==(\Auth::user()->company()->personnelPass)){
             $profile = $user->profile();
 
             if(($user->post())==2){
@@ -489,7 +492,7 @@ class UserController extends Controller
     {
         $user = User::find($userId);
 
-        if(($request->password)==(\Auth::user()->company()->companyPass)){
+        if(($request->personnelPass)==(\Auth::user()->company()->personnelPass)){
             $profile = $user->profile();
             $profile->companyId = null;
             $profile->post = 0;

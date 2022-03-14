@@ -28,8 +28,6 @@
 </div>
 @include('project.indexButton')
 @if($project->existTeam())
-<div class = ''>
     @include('task.graph')
-</div>
 @endif
 @endsection('content')

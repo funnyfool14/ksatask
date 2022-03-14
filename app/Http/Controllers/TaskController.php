@@ -74,7 +74,6 @@ class TaskController extends Controller
     public function show($id)
     {
         $task = Task::find($id);
-
         return view ('task.show',[
             'task' => $task,
         ]);
@@ -121,7 +120,9 @@ class TaskController extends Controller
         $task->deadline = $request->deadline;
         $task->save();
     
-        return redirect(route('users.top'));
+        return redirect(route('tasks.show',[
+            'task' => $task,
+        ]));
         
     }
 
@@ -189,6 +190,28 @@ class TaskController extends Controller
         
     }
 
+    public function progress($taskId)
+    {
+        $task = Task::find($taskId);
+
+        return view ('task.progress',[
+            'task' => $task,
+        ]);
+    }
+
+    public function progressUp(Request $request, $taskId)
+    {
+        $task = Task::find($taskId);
+
+        $task->progress= $request->progress;
+        $task->save();
+
+        return view ('task.show',[
+            'task' => $task,
+        ]);
+    }
+
+
     public function inCharge(Request $request, $taskId)
     {
         $member = User::find($request->memberId);
@@ -204,7 +227,7 @@ class TaskController extends Controller
                 $message->sender = \Auth::id();
                 $message->reciever = $request->memberId;
                 $message->subject = '担当タスクの追加';
-                $message->sentence = $team->teamName.' の'.$task->title.' が'.$member->firstName.' '.$member->lastName.' さんに振り分けられました。';
+                $message->sentence = $team->teamName.' の'.$task->title." が\n".$member->firstName.' '.$member->lastName.' さんに振り分けられました。';
                 $message->status = "unread";
 
                 $message->save();
@@ -270,5 +293,14 @@ class TaskController extends Controller
             'task' => $task,
         ]));
 
+    }
+
+    public function ask($taskId)
+    {
+        $task = Task::find($taskId);
+        
+        return view ('task.ask',[
+            'task' => $task,
+        ]);
     }
 }

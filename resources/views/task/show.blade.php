@@ -66,10 +66,15 @@
         <a class = 'col-sm-3'>詳細</a>
         <h3>{!!$task->detail!!}</h3>
     </div>
+    @if($task->progress)
+    <div class = 'row mt-4'>
+        <a class = 'col-sm-3'>進捗
+        </a>
+        <h3>{!!$task->progress!!}</h3>
+    </div>
+    @endif
 </div>
-@if(($task->register)==Auth::id())
 @include('task.editButton')
-@endif
 @if($task->teamId)
 <div class = "row mt-4 mb-5">
     <div class = "offset-sm-3 col-sm-3">

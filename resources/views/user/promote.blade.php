@@ -14,7 +14,7 @@
         @csrf
         <div class = "mt-5 row">
             <div class="offset-sm-2 col-sm-6 mb-4">
-                <input type="text" class="form-control" name="password" value="会社のログインパスワード">
+                <input type="text" class="form-control" name="personnelPass" value="人事用パスワード">
             </div>
             <div class = "col-sm-2">
                 <button type="submit" class='btn btn-success btn-block'>はい</button>

@@ -1,9 +1,11 @@
 @extends('commons.layouts')
 @include('commons.navbar')
 @section('content')
-<form method="POST" action="{{route('projects.update',['project'=>$project->id])}}" enctype="multipart/form-data">
-    @csrf
-    @method('PUT')
+<div class='offset-sm-3 col-sm-6'>
+<h3 class = 'text-center mt-5'>プロジェクト内容変更</h3>
+    <form method="POST" action="{{route('projects.update',['project'=>$project->id])}}" enctype="multipart/form-data">
+        @csrf
+        @method('PUT')
         <div class="form-group">
             <label for="projectName">プロジェクト名</label>
             <input type="text" class="form-control" name="projectName" value={{$project->projectName}}>
@@ -41,5 +43,8 @@
             <button type="submit" class='btn btn-primary btn-lg mt-5 col-sm-8'>変更</button>
         </div> 
     </form>
+</div>
+<div class = "offset-sm-4 col-sm-4 mt-5 mt-5 mb-5">
+    {{link_to_route('projects.show','プロジェクトTOP',['project'=>$project->id],['class' => 'btn btn-outline-success btn-block'])}}
 </div>
 @endsection('content')

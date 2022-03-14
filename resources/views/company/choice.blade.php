@@ -4,7 +4,5 @@
 <div class = "centering">
     <h4>会社情報を入力してください</h4>
 </div>
-<div class = "offset-sm-3 col-sm-6">
-    @include('company.enterPass')
-</div>
+@include('company.enterPass')
 @endsection('content')

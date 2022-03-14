@@ -60,10 +60,14 @@ Route::group(['middleware'=>['auth']],function(){
     Route::get('team/{id}/taskCreate','TaskController@teamCreate')->name('tasks.teamCreate');
     Route::post('team/{id}/taskCreate','TaskController@teamstore')->name('tasks.teamStore');
     Route::put('team/{id}/taskUpdate','TaskController@teamUpdate')->name('tasks.teamUpdate');
+    Route::get('task/{task}/progress','TaskController@progress')->name('tasks.progress');
+    Route::put('task/{task}/progress','TaskController@progressUp')->name('tasks.progressUp');
     Route::post('inChargeOfTask/{id}/','TaskController@inCharge')->name('tasks.inCharge');
     Route::get('task/{task}/user/{user}','TaskController@remove')->name('tasks.remove');
     Route::get('task/{task}/delete}','TaskController@preDelete')->name('tasks.preDelete');
     Route::post('task/{task}/delete}','TaskController@delete')->name('tasks.delete');
+    Route::get('task/{task}/ask}','TaskController@ask')->name('tasks.ask');
+
 
     Route::resource('messages','MessageController');
     Route::get('messageTo/{user}','MessageController@write')->name('messages.write');
@@ -72,6 +76,11 @@ Route::group(['middleware'=>['auth']],function(){
     Route::post('send/{id}', 'MessageController@sendCheck')->name('messages.sendCheck');
     Route::get('send/{id}', 'MessageController@send')->name('messages.send');
     Route::get('unsent/{id}', 'MessageController@unsent')->name('messages.unsent');
+    Route::post('ask/{id}', 'MessageController@askCheck')->name('messages.askCheck');
+    Route::get('message/{message}/ask/{task}', 'MessageController@askSend')->name('messages.askSend');
+    Route::get('message/{message}/ask/{task}', 'MessageController@askEdit')->name('messages.askEdit');
+    Route::put('message/{message}/ask/{task}', 'MessageController@askUpdate')->name('messages.askUpdate');
+    Route::get('message/{message}/task/{task},unsent', 'MessageController@askUnsent')->name('messages.askUnsent');
     Route::get('test', 'MessageController@test');
 });
 

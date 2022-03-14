@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Mail;
 use App\Message;
 use App\User;
+use App\Task;
 use \App\Mail\SendMessage;
 use App\Mail\SendTestMail;
 
@@ -90,6 +91,8 @@ class MessageController extends Controller
     {
         $message = Message::find($messageId);
         $sender = User::find($message->sender);
+        $message->sentence = "\n \n>>>　$message->sentence";
+        $message->save();
         
         return view ('message.reply',[
             'message' => $message,
@@ -118,7 +121,7 @@ class MessageController extends Controller
         $message->reciever = $beforeMessage->sender;
         $message->subject = $request->subject;
         $message->sentence = $request->sentence;
-        //$message->before = $messageId;
+        $message->before = $messageId;
         $message->status = "unread";
 
         $message->save();
@@ -162,6 +165,7 @@ class MessageController extends Controller
     public function edit($id)
     {
         $message = Message::find($id);
+        
         return view ('message.edit',[
             'message' => $message,
         ]);
@@ -207,6 +211,95 @@ class MessageController extends Controller
             'user'-> $user->id,
         ]));
     }
+
+    public function ask(Request $request, $taskId)
+    {
+        $request->validate([
+            'subject'=>'required',
+            'sentence'=>'required',
+        ]);
+
+        $task = Task::find($taskId);
+
+    	$message = new Message;
+
+        $message->sender = \Auth::id();
+        $message->reciever = $task->leader;
+        $message->subject = $request->subject;
+        $message->sentence = $request->sentence;
+        $message->status = "unread";
+
+        $message->save();
+
+        return view ('message.askCheck',[
+            'message' => $message,
+            'task' => $task,
+        ]);
+
+    }
+
+    public function askSend($messageId, $taskId)
+    {
+        $message = Message::find($messageId);
+        $task = Task::find($taskId);
+        $reciever = User::find($message->reciever);
+
+        Mail::to($reciever->email)->send(new SendMessage($message));
+
+        return redirect (route('tasks.show'),[
+        'task' => $task,     
+        ]);
+    }
+
+    public function askEdit($messageId, $taskId)
+    {
+        $message = Message::find($messageId);
+        $task = Task::find($taskId);
+        
+        return view ('message.askEdit',[
+            'message' => $message,
+            'task' => $task,
+        ]);
+    }
+
+    public function askUpdate(Request $request, $messageId, $taskId)
+    {
+        $message = Message::find($messageId);
+        $task = Task::find($taskId);
+        
+        $message->subject = $request->subject;
+        $message->sentence = $request->sentence;
+        $message->status = 'unread';
+
+        $message->save();
+
+        return view ('message.askCheck',[
+            'message' => $message,
+            'task' => $task,
+        ]);
+    }
+
+    public function askUnsent($messageId, $taskId)
+    {
+        $message = Message::find($messageId);
+        $task = Task::find($taskId);
+
+        $message->status ='unsent';
+        $message->save();
+
+        return redirect (route('tasks.show'),[
+            'task' => $task,
+        ]);
+    }
+
+
+
+
+
+
+
+
+
     public function test()
     {
 

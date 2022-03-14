@@ -1,16 +1,16 @@
 @extends('commons.layouts')
 @include('commons.navbar')
 @section('content')
-<h5 class ="text-center mt-5 mb-4">{{"以下の内容でメッセージを送信します"}}</h5>
-<div class = "offset-sm-1 col-sm-8">
-    <a>{{"件名"}}</a>
-    <div class = "offset-sm-2">
-        <h4>{{$message->subject}}</h4>
+@include('message.check')
+<div class = "row mt-4">
+    <div class = "offset-sm-3 col-sm-2">
+        {{link_to_route('messages.send','送信する',['id' => $message->id],['class'=>'btn btn-block btn-outline-primary'])}}
     </div>
-    <a class>{{"本文"}}</a>
-    <div class = "offset-sm-2">
-        <h3>{{$message->sentence}}</h3>
+    <div class = "col-sm-2">
+        {{link_to_route('messages.edit','編集する',[$message->id],['class'=>'btn btn-block btn-outline-success'])}}
+    </div>
+    <div class = "col-sm-2">
+        {{link_to_route('messages.unsent','下書きに保存',['id' => $message->id],['class'=>'btn btn-block btn-outline-danger'])}}
     </div>
 </div>
-@include('message.sendButton')
 @endsection('content')
