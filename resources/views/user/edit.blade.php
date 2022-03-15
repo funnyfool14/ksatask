@@ -1,4 +1,5 @@
 @extends('commons.layouts')
+@include('commons.navbar')
 @section('content')
 <form method="POST" action="{{route('users.update',['user'=>$user->id])}}" enctype="multipart/form-data">
 @csrf
@@ -15,6 +16,10 @@
                 <label for="coment">名</label>
                 <input type="text" class="form-control" name="lastName" value="{{$user->lastName}}">
             </div>
+        </div>
+        <div class="form-group row">
+            <label for="email">メールアドレス</label>
+            <input type="text" class="form-control" name="email" value="{{$user->email}}">
         </div>
         <div class="form-group mt-3 row">
             <label for="companyName">好きな言葉</label>
@@ -45,8 +50,11 @@
         @endif
     </div>
 </div>
-<div class="mt-5 offset-sm-2 col-sm-8">
-    <button type="submit" class='btn btn-outline-primary btn-lg btn-block'>登録</button>
-</div> 
+<div class="mt-5 offset-sm-4 col-sm-4">
+    <button type="submit" class='btn btn-primary btn-lg btn-block'>登録</button>
+</div>
+<div class="mt-5 mb-5 offset-sm-4 col-sm-4">
+    {!!link_to_route('users.top','戻る',[],['class'=>'btn btn-outline-success btn-block'])!!}
+</div>
 </form>
 @endsection('content')

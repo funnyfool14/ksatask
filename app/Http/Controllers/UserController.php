@@ -173,6 +173,7 @@ class UserController extends Controller
         $request->validate([
             'firstName'=>'required',
             'lastName'=>'required',
+            'email'=>'required',
             'pic'=>'image'
             ]);
 
@@ -180,6 +181,8 @@ class UserController extends Controller
         $profile = $user->profile();
         $user->firstName = $request->firstName; 
         $user->lastName = $request->lastName;
+        $user->lastName = $request->email;
+
 
         $pic = $request->file('pic');
         if($pic){
