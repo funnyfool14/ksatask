@@ -84,7 +84,7 @@ class User extends Authenticatable
 
     public function recievedMessages()
     {
-        $messages = $this->hasMany(Message::class,'reciever')->orderBy('id', 'desc')->paginate(7,['*'],'recirvedMessages')->appends(['recievedMessages' => PostRequest::input('recievedMessages'),'sentMessages' => PostRequest::input('sentMessages')]);
+        $messages = $this->hasMany(Message::class,'reciever')->where('status','!=','unsent')->orderBy('id', 'desc')->paginate(7,['*'],'recirvedMessages')->appends(['recievedMessages' => PostRequest::input('recievedMessages'),'sentMessages' => PostRequest::input('sentMessages')]);
         
         if(($messages->count())>0){
             return $messages;

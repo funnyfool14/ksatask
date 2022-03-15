@@ -172,7 +172,6 @@ class TaskController extends Controller
             'title'=>'required',
             'importance'=>'required',
             'urgency'=>'required',
-            'private'=>'required',
             'detail'=>'max:400|required']);
    
         $task = Task::find($id);
@@ -293,14 +292,5 @@ class TaskController extends Controller
             'task' => $task,
         ]));
 
-    }
-
-    public function ask($taskId)
-    {
-        $task = Task::find($taskId);
-        
-        return view ('task.ask',[
-            'task' => $task,
-        ]);
     }
 }

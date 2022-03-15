@@ -2,7 +2,7 @@
 @include('commons.navbar')
 @section('content')
 <h3 class = 'text-center mt-3'>メッセージ送信</h3>
-<form method="POST" action="{{route('messages.askCheck',['task' => $task->id])}}" enctype="multipart/form-data">
+<form method="POST" action="{{route('messages.askCheck',['id' => $task->id])}}" enctype="multipart/form-data">
     @csrf
     @method('POST')
     <div class = "offset-sm-1 col-sm-10">
@@ -12,7 +12,7 @@
         </div>
         <div class="form-group">
             <label for='sentence'>本文</label>
-            <input type="text" style ="height:300px" class="form-control" name="sentence" value="{{old('sentence')}}">
+            <textarea type="text" class="form-control" style ="height:300px" name="sentence">{{old('sentence')}}</textarea>
         </div>
     </div>
     <div class="mt-5 mb-5">

@@ -91,7 +91,7 @@ class MessageController extends Controller
     {
         $message = Message::find($messageId);
         $sender = User::find($message->sender);
-        $message->sentence = "\n \n>>>　$message->sentence";
+        $message->sentence = "\n\n>>>\n$message->sentence";
         $message->save();
         
         return view ('message.reply',[
@@ -199,32 +199,51 @@ class MessageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function preDelete($id)
     {
-        dd('test');
         $message = Message::find($id);
-        $user = User::find($message->reciever);
 
-        $message->delete();
+        return view ('message.delete',[
+            'message' => $message,
+        ]);
+    }
+    public function delete(Request $request, $messageId)
+    {
+        $message = Message::find($messageId);
+        
+        if(($request->email)==\Auth::user()->email){
 
-        return redirect(route('user.show',[
-            'user'-> $user->id,
-        ]));
+            $message->delete();
+
+            return redirect(route('messages.index'));
+        }
+
+        return view ('message.cantDelete',[
+        'message' => $message,
+        ]);
     }
 
-    public function ask(Request $request, $taskId)
+    public function ask($taskId)
     {
+        $task = Task::find($taskId);
+        
+        return view ('message.ask',[
+            'task' => $task,
+        ]);
+    }
+    
+    public function askCheck(Request $request , $taskId){
+
         $request->validate([
             'subject'=>'required',
             'sentence'=>'required',
         ]);
 
         $task = Task::find($taskId);
-
     	$message = new Message;
 
         $message->sender = \Auth::id();
-        $message->reciever = $task->leader;
+        $message->reciever = $task->register;
         $message->subject = $request->subject;
         $message->sentence = $request->sentence;
         $message->status = "unread";
@@ -235,7 +254,6 @@ class MessageController extends Controller
             'message' => $message,
             'task' => $task,
         ]);
-
     }
 
     public function askSend($messageId, $taskId)
@@ -246,9 +264,9 @@ class MessageController extends Controller
 
         Mail::to($reciever->email)->send(new SendMessage($message));
 
-        return redirect (route('tasks.show'),[
+        return redirect (route('tasks.show',[
         'task' => $task,     
-        ]);
+        ]));
     }
 
     public function askEdit($messageId, $taskId)
@@ -287,7 +305,38 @@ class MessageController extends Controller
         $message->status ='unsent';
         $message->save();
 
-        return redirect (route('tasks.show'),[
+        return redirect (route('tasks.show',[
+            'task' => $task,
+        ]));
+    }
+    public function askPreDelete($messageId, $taskId)
+    {
+
+        $message = Message::find($messageId);
+        $task = Task::find($taskId);
+
+
+        return view ('message.askDelete',[
+            'message' => $message,
+            'task' => $task,
+        ]);
+    }
+    public function askDelete(Request $request, $messageId, $taskId)
+    {
+        $message = Message::find($messageId);
+        $task = Task::find($taskId);
+
+        if(($request->email)==\Auth::user()->email){
+
+            $message->delete();
+
+        return redirect(route('tasks.show',[
+            'task' => $task,
+        ]));
+        }
+
+        return view('message.askCantDelete',[
+            'message' => $message,
             'task' => $task,
         ]);
     }

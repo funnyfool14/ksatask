@@ -66,18 +66,22 @@ Route::group(['middleware'=>['auth']],function(){
     Route::get('task/{task}/user/{user}','TaskController@remove')->name('tasks.remove');
     Route::get('task/{task}/delete}','TaskController@preDelete')->name('tasks.preDelete');
     Route::post('task/{task}/delete}','TaskController@delete')->name('tasks.delete');
-    Route::get('task/{task}/ask}','TaskController@ask')->name('tasks.ask');
 
 
     Route::resource('messages','MessageController');
+    Route::get('messages/{message}/delete','MessageController@preDelete')->name('messages.preDelete');
+    Route::post('messages/{message}/delete','MessageController@delete')->name('messages.delete');
+    Route::get('messages/{message}/{task}/askDelete','MessageController@askPreDelete')->name('messages.askPreDelete');
+    Route::post('messages/{message}/{task}/askDelete','MessageController@askDelete')->name('messages.askDelete');
     Route::get('messageTo/{user}','MessageController@write')->name('messages.write');
-    Route::get('replyTo/{message}}','MessageController@reply')->name('messages.reply');
+    Route::get('replyTo/{message}','MessageController@reply')->name('messages.reply');
     Route::post('replyTo/{id}', 'MessageController@replyCheck')->name('messages.replyCheck');
     Route::post('send/{id}', 'MessageController@sendCheck')->name('messages.sendCheck');
     Route::get('send/{id}', 'MessageController@send')->name('messages.send');
     Route::get('unsent/{id}', 'MessageController@unsent')->name('messages.unsent');
+    Route::get('ask/{id}','MessageController@ask')->name('messages.ask');
     Route::post('ask/{id}', 'MessageController@askCheck')->name('messages.askCheck');
-    Route::get('message/{message}/ask/{task}', 'MessageController@askSend')->name('messages.askSend');
+    Route::get('message/{message}/ask/{task}/send', 'MessageController@askSend')->name('messages.askSend');
     Route::get('message/{message}/ask/{task}', 'MessageController@askEdit')->name('messages.askEdit');
     Route::put('message/{message}/ask/{task}', 'MessageController@askUpdate')->name('messages.askUpdate');
     Route::get('message/{message}/task/{task},unsent', 'MessageController@askUnsent')->name('messages.askUnsent');

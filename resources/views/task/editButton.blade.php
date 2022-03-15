@@ -11,7 +11,7 @@
     </div>
 </div>
 @elseif($task->teamId)
-    @if($task->team()->leader()==Auth::user()|$task->team()->deputy()==Auth::user())
+    @if(($task->register)==Auth::id())
     <div class = "row justify-content-center mt-5 mb-5">
         <div class = "col-sm-3">
             {{link_to_route('tasks.edit','編集',['task' => $task->id],['class' => 'btn btn-primary btn-block'])}}
@@ -29,7 +29,7 @@
             {{link_to_route('tasks.progress','進捗入力',['task' => $task->id],['class' => 'btn btn-primary btn-block'])}}
         </div>
         <div class = "col-sm-3">
-            {{link_to_route('tasks.ask','変更依頼',['task' => $task->id],['class' => 'btn btn-warning btn-block'])}}
+            {{link_to_route('messages.ask','変更依頼',['id' => $task->id],['class' => 'btn btn-warning btn-block'])}}
         </div>
     </div>
     @endif

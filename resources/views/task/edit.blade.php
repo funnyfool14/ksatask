@@ -48,7 +48,7 @@
         </div>
         <div class='form-group'>
             <label for="detail">詳細</label>
-            <input type="text" class="form-control" name="detail" value="{{$task->detail}}">
+            <textarea type="text" class="form-control" style ="height:100px" name="detail">{{$task->detail}}</textarea>
         </div>
         @if($task->teamId)
         <div class="text-center mt-5 mb-5">

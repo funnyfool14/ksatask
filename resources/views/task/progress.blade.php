@@ -12,9 +12,9 @@
         @csrf
         @method('PUT')
         @if($task->progress)
-        <input type="text" style ="height:300px" class="form-control" name="progress" value="{{$task->progress}}">
+        <textarea type="text" class="form-control" style ="height:100px" name="progress">{{$task->progress}}</textarea>
         @else
-        <input type="text" style ="height:300px" class="form-control" name="progress" value="{{old('progress')}}">
+        <textarea type="text" class="form-control" style ="height:100px" name="progress">{{old('progress')}}</textarea>
         @endif
             <div class="text-center mt-5 mb-5">
                 <button type="submit" class='btn btn-primary btn-lg mt-5 col-sm-8'>進捗更新</button>

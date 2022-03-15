@@ -64,13 +64,13 @@
     </div>
     <div class = 'row mt-4'>
         <a class = 'col-sm-3'>詳細</a>
-        <h3>{!!$task->detail!!}</h3>
+        <h3>{!!nl2br(e($task->detail))!!}</h3>
     </div>
     @if($task->progress)
     <div class = 'row mt-4'>
         <a class = 'col-sm-3'>進捗
         </a>
-        <h3>{!!$task->progress!!}</h3>
+        <h3>{!!nl2br(e($task->progress))!!}</h3>
     </div>
     @endif
 </div>

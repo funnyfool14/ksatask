@@ -19,17 +19,17 @@
         <div class="form-group mt-3 row">
             <label for="companyName">好きな言葉</label>
             @if($profile->maxim)
-            <input type="text" class="form-control" name="maxim" value="{{$profile->maxim}}">
+            <textarea type="text" class="form-control"  name="maxim">{{$profile->maxim}}</textarea>
             @else
-            <input type="text" class="form-control" name="maxim" value="{{old('maxim')}}">
+            <textarea type="text" class="form-control"  name="maxim">{{old('maxim')}}</textarea>
             @endif
         </div>
         <div class="form-group mt-3 row">
             <label for="coment">一言コメント</label>
             @if($profile->coment)
-            <input type="text" class="form-control" name="coment" value="{{$profile->coment}}">
+            <textarea type="text" class="form-control"  name="coment">{{$profile->coment}}</textarea>
             @else
-            <input type="text" class="form-control" name="coment" value="{{old('coment')}}">
+            <textarea type="text" class="form-control"  name="coment">{{old('coment')}}</textarea>
             @endif
         </div>
         <label for="pic mt-3">写真の変更</label>
