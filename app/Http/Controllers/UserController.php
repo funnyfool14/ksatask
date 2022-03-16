@@ -181,7 +181,7 @@ class UserController extends Controller
         $profile = $user->profile();
         $user->firstName = $request->firstName; 
         $user->lastName = $request->lastName;
-        $user->lastName = $request->email;
+        $user->email = $request->email;
 
 
         $pic = $request->file('pic');

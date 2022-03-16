@@ -15,7 +15,13 @@ class Progresses extends Migration
     {
         Schema::create('progresses', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('taskId');
+            $table->unsignedBigInteger('userId');
+            $table->text('sentence');
             $table->timestamps();
+
+            $table->foreign('userId')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('taskId')->references('id')->on('tasks')->onDelete('cascade');
         });
     }
 
