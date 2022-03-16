@@ -2,7 +2,7 @@
 @section('content')
 @include('commons.navbar')
 <div class = ''>
-    <h3 class = "centering">ログイン</h3>
+    <h3 class = "centering">ユーザ登録</h3>
     <div class = 'mt-4 offset-sm-3 col-sm-6'>
         <form method = "post" action = "{{route('register')}}">
             @csrf
