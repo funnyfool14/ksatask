@@ -21,6 +21,7 @@ class Tasks extends Migration
             $table->unsignedBigInteger('register');
             $table->date('deadline')->index()->nullable();
             $table->string('private')->defalt('public');
+            $table->string('status')->defalt('progress');
             $table->unsignedBigInteger('teamId')->nullable();
             $table->text('detail'); 
             $table->text('progress')->nullable(); 
