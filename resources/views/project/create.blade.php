@@ -27,7 +27,7 @@
         </div>
         <div class='form-group'>
             <label for="detail">詳細</label>
-            <input type="text" class="form-control" name="detail" value="{{old('detail')}}">
+            <textarea type="text" class="form-control" name="detail">{{old('detail')}}</textarea>
         </div>
         <div class="text-center mt-5 mb-5">
             <button type="submit" class='btn btn-primary btn-lg mt-5 col-sm-8'>登録</button>

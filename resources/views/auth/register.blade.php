@@ -60,7 +60,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <div class="offset-sm-3 col-sm-6">
+                <div class="offset-sm-3 col-sm-6 mb-5">
                     <button type="submit" class="btn btn-outline-primary btn-block">
                         {{('登録')}}
                     </button>

@@ -23,7 +23,7 @@
         </div>
     </div>
     <div class = "offset-sm-1 col-sm-6 mt-4">
-        <h4>{{$project->detail}}</h4>
+        <h4>{!!nl2br(e($project->detail))!!}</h4>
     </div>
 </div>
 @include('project.indexButton')

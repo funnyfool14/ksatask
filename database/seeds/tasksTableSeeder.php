@@ -12,7 +12,7 @@ class tasksTableSeeder extends Seeder
     public function run()
     {
         for($i = 1; $i <= 9; $i++) {
-            DB::table('users')->insert([
+            DB::table('tasks')->insert([
             'title' => '期限設定なし' . $i,
             'importance' => 3,
             'urgency' => 1,

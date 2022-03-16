@@ -4,7 +4,7 @@
     @else
     <img class="userPic" src="{{asset('image/user_pic.jpg')}}" alt="">
     @endif
-    <div class = "row">
+    <div class = "row mt-2">
         <div class = 'name col-sm-8'>
             <h3>{{$user->firstName.' '.$user->lastName}}</h3>
         </div>

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Task;
 use App\User;
-use App\team;
+use \App\team;
 use DB;
 use \App\Message;
 use Mail;

@@ -4,7 +4,7 @@
 <div class = "centering">
     <h3>{{$team->teamName.' から'}}</h3>
     <h3 class="mt-4 mb-4">{{$user->firstName.' '.$user->lastName.' を外しますか？'}}</h3>
-    @if($tasks->exists())
+    @if(count($tasks)>=1)
     <a>{{'担当タスク'}}</a>
     @foreach($tasks as $task)
         <h4>{{$task->title}}</h4>
