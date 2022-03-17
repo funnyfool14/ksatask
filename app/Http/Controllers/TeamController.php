@@ -44,7 +44,7 @@ class TeamController extends Controller
 
         $user = User::find($request->leader);
 
-        if($user!=($team->project()->manager())){
+        if($user!=(\Auth::user())){
             $message = new Message;
             $message->sender = \Auth::id();
             $message->reciever = $request->leader;
@@ -253,25 +253,30 @@ class TeamController extends Controller
             'leader'=>'required',]); 
 
         $team = Team::find($id);
+        $leader = $team->leader();
+
         $team->teamName = $request->teamName;
         $team->leader = $request->leader;
         $team->save();
 
         $user = User::find($request->leader);
 
-        if($user!=($team->project()->manager())){
-            $message = new Message;
-            $message->sender = \Auth::id();
-            $message->reciever = $request->leader;
-            $message->subject = 'チームリーダー任命';
-            $message->sentence = $user->firstName.' '.$user->lastName." さんを\n".$team->project()->projectName.'プロジェクトの'.$team->teamName." のチームリーダーに任命しました。\nチーム画面からメンバーを組織しタスクを立ててください。";
-            $message->status = "unread";
+        if($user!=$leader){
+            if(($request->leader)!=\Auth::id()){
+                $message = new Message;
+                $message->sender = \Auth::id();
+                $message->reciever = $request->leader;
+                $message->subject = 'チームリーダー任命';
+                $message->sentence = $user->firstName.' '.$user->lastName." さんを\n".$team->project()->projectName.'プロジェクトの'.$team->teamName." のチームリーダーに任命しました。\nチーム画面からメンバーを組織しタスクを立ててください。";
+                $message->status = "unread";
 
-            $message->save();
+                $message->save();
 
-            $reciever = User::find($message->reciever);
-            Mail::to($reciever->email)->send(new SendMessage($message));
+                $reciever = User::find($message->reciever);
+                Mail::to($reciever->email)->send(new SendMessage($message));
+            }
         }
+
         if($team->members()->where('userId',$team->leader)->doesntExist()){
             $team->members()->attach($team->leader);
         }

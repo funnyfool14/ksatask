@@ -78,6 +78,8 @@ class ProjectController extends Controller
             $project->detail = $request->detail;
             $project->save();
 
+            if(($request->manager)!=\Auth::id()){
+
             $user = User::find($request->manager);
         
             $message = new Message;
@@ -91,9 +93,11 @@ class ProjectController extends Controller
     
             $reciever = User::find($message->reciever);
             Mail::to($reciever->email)->send(new SendMessage($message));
+
+            }
             
             return redirect(route('projects.show',[
-                'project' => $project->id,
+                'project' => $project,
             ]));
     }
 
@@ -192,11 +196,31 @@ class ProjectController extends Controller
             'detail'=>'max:400|required']);
 
             $project = Project::find($id);
+            $manager = $project->manager;
+
             $project->projectName = $request->projectName;
             $project->manager = $request->manager;
             $project->deadline = $request->deadline;
             $project->detail = $request->detail;
             $project->save();
+
+            if(($request->manager!=$manager)){
+                if(($request->manager)!=\Auth::id()){
+                    $user = User::find($request->manager);
+                
+                    $message = new Message;
+                    $message->sender = \Auth::id();
+                    $message->reciever = $request->manager;
+                    $message->subject = 'プロジェクトマネージャー任命';
+                    $message->sentence = $user->firstName.' '.$user->lastName.' さんを'.$project->projectName.' のプロジェクトマネージャーに任命しました。プロジェクト画面から、チームの編成をしてください。';
+                    $message->status = "unread";
+            
+                    $message->save();
+            
+                    $reciever = User::find($message->reciever);
+                    Mail::to($reciever->email)->send(new SendMessage($message));
+                }
+            }
 
         return redirect(route('projects.show',[
         'project' => $id,
@@ -232,9 +256,9 @@ class ProjectController extends Controller
             ]));
         }
 
-        return redirect (route('projects.show',[
+        return view ('project.cantDelete',[
             'project' => $project,
-        ]));
+        ]);
     }
 
     public function members($id)

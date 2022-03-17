@@ -24,7 +24,6 @@ class Tasks extends Migration
             $table->string('status')->defalt('progress');
             $table->unsignedBigInteger('teamId')->nullable();
             $table->text('detail'); 
-            $table->text('progress')->nullable(); 
             $table->timestamps();
 
             $table->foreign('teamId')->references('id')->on('teams')->onDelete('cascade');

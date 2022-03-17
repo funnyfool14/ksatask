@@ -11,7 +11,7 @@ class Profile extends Seeder
      */
     public function run()
     {
-        for($i = 2; $i <= 14; $i++) {
+        for($i = 2; $i <= 15; $i++) {
             DB::table('profiles')->insert([
             'userId' =>  $i,
             'companyId' => 1,

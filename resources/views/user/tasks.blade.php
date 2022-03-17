@@ -1,5 +1,5 @@
 <div class = "text-center mt-5">
-    @if($user->team()->get())
+    @if(count($user->team()->get())>=1)
         <a>{{'参加チーム'}}</a>
         @foreach($user->team()->get() as $team)
             <h4 class = "mt-2">{{$team->teamName}}</h4>

@@ -52,4 +52,5 @@
         </div> 
     </form>
 </div>
+@include('team.back')
 @endsection('content')

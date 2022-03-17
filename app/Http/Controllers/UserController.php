@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Company;
 use Illuminate\Http\Request;
 use Request as PostRequest;
 use Illuminate\Support\Facades\Storage;
@@ -308,21 +309,17 @@ class UserController extends Controller
     public function search(Request $request)
     {
         $search = UserRequest::get('name');
-        $query = User::query();
-        $user = \Auth::user();
-        $company = $user->profile()->company();
+        $userIds = \Auth::user()->company()->users()->pluck('id');
 
         if($search){
-            $users = $query->where('firstName','like','%'.$search.'%')->orWhere('lastName','like','%'.$search.'%')->get();
+            $users = User::query()->where('firstName','like','%'.$search.'%')->orWhere('lastName','like','%'.$search.'%')->whereIn('id',$userIds)->get()->exceptMe();
         }
         if(empty($search)){
-            $users = $query->get()->exceptMe();
+            $users = User::query()->whereIn('id',$userIds)->get()->exceptMe();
         }
 
         return view ('company.index',[
             'users' => $users,
-            'user' => $user,
-            'company' => $company,
         ]);
     }
 
@@ -417,9 +414,9 @@ class UserController extends Controller
                 }
             }
 
-            return redirect (route('users.show',[
-                'user' => $user->id,
-            ]));
+            return view ('user.cantPromote',[
+                'user' => $user,
+            ]);
         }
 
         return back();
@@ -429,31 +426,38 @@ class UserController extends Controller
     {
         $user = User::find($userId);
 
-        if(($request->personnelPass)==(\Auth::user()->company()->personnelPass)){
-            $profile = $user->profile();
+        if(\Auth::user()->authority()){
+            if(($request->personnelPass)==(\Auth::user()->company()->personnelPass)){
+                $profile = $user->profile();
 
-            if(($user->post())==2){
-                $profile->post=1;
-                $profile->save();
-            }
+                if(($user->post())==2){
+                    $profile->post=1;
+                    $profile->save();
+                }
 
-            if(($user->post())==3){
-                $profile->post=2;
-                $profile->save();
-            }
-        
-            if(($user->post())==4){
-                $profile->post=3;
-                $profile->save();
-            }
+                if(($user->post())==3){
+                    $profile->post=2;
+                    $profile->save();
+                }
             
+                if(($user->post())==4){
+                    $profile->post=3;
+                    $profile->save();
+                }
 
-            return redirect (route('users.show',[
+                return redirect (route('users.show',[
+                    'user' => $user,
+                ]));
+
+            }
+
+            return view ('user.cantDemote',[
                 'user' => $user,
-            ]));
+            ]);
         }
 
         return back();
+
     }
 
     public function teams($id)

@@ -66,6 +66,14 @@ Route::group(['middleware'=>['auth']],function(){
     Route::get('task/{task}/user/{user}','TaskController@remove')->name('tasks.remove');
     Route::get('task/{task}/delete}','TaskController@preDelete')->name('tasks.preDelete');
     Route::post('task/{task}/delete}','TaskController@delete')->name('tasks.delete');
+    Route::get('task/{task}/askDelete','TaskController@askPredelete')->name('tasks.askPredelete');
+    Route::post('task/{task}/askDelete','TaskController@askDelete')->name('tasks.askDelete');
+
+    Route::get('progress/{progress}/edit','TaskController@progressEdit')->name('progress.edit');
+    Route::put('progress/{progress}/edit','TaskController@progressUpdate')->name('progress.update');
+    Route::get('progress/{progress}/delete','TaskController@progressPredelete')->name('progress.predelete');
+    Route::post('progress/{progress}/delete','TaskController@progressDelete')->name('progress.delete');
+
 
 
     Route::resource('messages','MessageController');

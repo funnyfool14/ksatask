@@ -208,6 +208,13 @@ class User extends Authenticatable
             });
     }
 
+    public function workTogether()
+    {
+        $companyId = $this->profile()->companyId;
+        $userIds = Profile::where('companyId',$companyId)->pluck('userId');
+        return User::query()->where('id',$userIds);
+    }
+
     /*public function leaderPick()//foreachで回して使用
     {
         $profile = Profile::where('userId',$this->id)->where('post',2)->first();

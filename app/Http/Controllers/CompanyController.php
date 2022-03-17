@@ -16,12 +16,12 @@ class CompanyController extends Controller
     public function index()
     {
         $company = \Auth::user()->profile()->company();
-        $users = $company->profiles()->users()->exceptMe();
+        $users = $company->users()->exceptMe();
 
         if($company){
             return view ('company.index',[
-            'company' => $company,
-            'users' => $users,
+                'users' => $users,
+                'company' => $company,
             ]);
         }
         return redirect (route('users.top'));

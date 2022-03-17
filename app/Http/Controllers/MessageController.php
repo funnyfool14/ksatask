@@ -54,7 +54,7 @@ class MessageController extends Controller
         $message->reciever = $id;
         $message->subject = $request->subject;
         $message->sentence = $request->sentence;
-        $message->status = "unread";
+        $message->status = "unsent";
 
         $message->save();
 
@@ -66,6 +66,7 @@ class MessageController extends Controller
     public function send($id)
     {
         $message = Message::find($id);
+        $message->status = 'unread';
         $reciever = User::find($message->reciever);
 
         Mail::to($reciever->email)->send(new SendMessage($message));
@@ -76,7 +77,6 @@ class MessageController extends Controller
     public function unsent($messageId)
     {
         $message = Message::find($messageId);
-        $message->status ='unsent';
         $message->save();
 
         return redirect (route('messages.index'));
@@ -122,7 +122,7 @@ class MessageController extends Controller
         $message->subject = $request->subject;
         $message->sentence = $request->sentence;
         $message->before = $messageId;
-        $message->status = "unread";
+        $message->status = "unsent";
 
         $message->save();
 
@@ -184,7 +184,7 @@ class MessageController extends Controller
         
         $message->subject = $request->subject;
         $message->sentence = $request->sentence;
-        $message->status = 'unread';
+        $message->status = 'unsent';
 
         $message->save();
 
@@ -240,13 +240,16 @@ class MessageController extends Controller
         ]);
 
         $task = Task::find($taskId);
+        $task->status = 'unsent';
+        $task->save();
+
     	$message = new Message;
 
         $message->sender = \Auth::id();
         $message->reciever = $task->register;
         $message->subject = $request->subject;
         $message->sentence = $request->sentence;
-        $message->status = "unread";
+        $message->status = "unsent";
 
         $message->save();
 
@@ -259,7 +262,13 @@ class MessageController extends Controller
     public function askSend($messageId, $taskId)
     {
         $message = Message::find($messageId);
+        $message ->status = 'unread';
+        $message->save();
+
         $task = Task::find($taskId);
+        $task->status = 'ask';
+        $task->save();
+
         $reciever = User::find($message->reciever);
 
         Mail::to($reciever->email)->send(new SendMessage($message));
@@ -287,7 +296,6 @@ class MessageController extends Controller
         
         $message->subject = $request->subject;
         $message->sentence = $request->sentence;
-        $message->status = 'unread';
 
         $message->save();
 
@@ -301,9 +309,6 @@ class MessageController extends Controller
     {
         $message = Message::find($messageId);
         $task = Task::find($taskId);
-
-        $message->status ='unsent';
-        $message->save();
 
         return redirect (route('tasks.show',[
             'task' => $task,
@@ -329,9 +334,11 @@ class MessageController extends Controller
         if(($request->email)==\Auth::user()->email){
 
             $message->delete();
+            $task->status = 'progress';
+            $task->save();
 
-        return redirect(route('tasks.show',[
-            'task' => $task,
+            return redirect(route('tasks.show',[
+                'task' => $task,
         ]));
         }
 

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Task;
 use App\User;
 use App\Team;
+use App\Progresse;
 use DB;
 use \App\Message;
 use Mail;
@@ -56,6 +57,7 @@ class TaskController extends Controller
         $task->importance = $request->importance;
         $task->urgency = $request->urgency;
         $task->private = $request->private;
+        $task->status = 'progress';
         $task->detail = $request->detail;
         $task->deadline = $request->deadline;
         $task->save();
@@ -116,6 +118,7 @@ class TaskController extends Controller
         $task->importance = $request->importance;
         $task->urgency = $request->urgency;
         $task->private = $request->private;
+        $task->status = 'progress';
         $task->detail = $request->detail;
         $task->deadline = $request->deadline;
         $task->save();
@@ -153,6 +156,7 @@ class TaskController extends Controller
         $task->importance = $request->importance;
         $task->urgency = $request->urgency;
         $task->private = 'public';
+        $task->status = 'progress';
         $task->detail = $request->detail;
         $task->teamId = $id;
         $task->deadline = $team->project()->deadline;
@@ -201,12 +205,77 @@ class TaskController extends Controller
     public function progressUp(Request $request, $taskId)
     {
         $task = Task::find($taskId);
+        $progress = new Progresse;
 
-        $task->progress= $request->progress;
-        $task->save();
+        $progress->taskId = $taskId;
+        $progress->userId = \Auth::id();
+        $progress->sentence = $request->sentence;
+
+        $progress->save();
+
 
         return view ('task.show',[
             'task' => $task,
+        ]);
+    }
+
+    public function progressEdit($progressId)
+    {
+        $progress = Progresse::find($progressId);
+        $task = Task::find($progress->taskId);
+
+        return view ('task.progressEdit',[
+            'progress' => $progress,
+            'task' => $task,
+
+        ]);
+
+    }
+
+    public function progressUpdate(Request $request, $progressId)
+    {
+        $progress = Progresse::find($progressId);
+        $task = Task::find($progress->taskId);
+
+        $progress->sentence = $request->sentence;
+        $progress->save();
+
+        return view ('task.show',[
+            'task' => $task,
+            'progress' => $progress,
+        ]);
+    }
+
+    public function progressPredelete($progressId)
+    {
+        $progress = Progresse::find($progressId);
+        $task = Task::find($progress->taskId);
+
+        return view ('task.progressDelete',[
+            'progress' => $progress,
+            'task' => $task,
+
+        ]);
+
+    }
+
+    public function progressDelete(Request $request, $progressId)
+    {
+        $progress = Progresse::find($progressId);
+        $task = Task::find($progress->taskId);
+        
+        if(($request->email)==(\Auth::user()->email)){
+                
+                $progress->delete();
+
+                return redirect(route('tasks.show',[
+                    'task' => $task,
+                ]));
+            }
+
+        return view ('task.cantDeleteProgress',[
+            'task' => $task,
+            'progress' => $progress,
         ]);
     }
 
@@ -288,9 +357,51 @@ class TaskController extends Controller
             ]));
         }
 
-        return redirect (route('tasks.show',[
+        return view ('task.cantDelete',[
             'task' => $task,
-        ]));
+        ]);
 
+    }
+
+        public function askPredelete($taskId)
+        {
+            $task = Task::find($taskId);
+    
+            return view ('task.askDelete',[
+                'task' => $task,
+            ]);
+
+        }
+
+    public function askDelete(Request $request, $taskId)
+    {
+        $task = Task::find($taskId);
+        
+        if(($request->email)==(\Auth::user()->email)){
+
+            $task->status = 'progress';
+            $task->save();
+
+            $message = new Message;
+            
+            $message->sender = \Auth::id();
+            $message->reciever = $task->register;
+            $message->subject = $task->title.'の変更依頼の取消';
+            $message->sentence = "タスクの変更依頼を取り消しいたします。\n宜しくお願いいたします。";
+            $message->status = 'unread';
+
+            $message->save();
+
+            Mail::to($message->reciever()->email)->send(new SendMessage($message));
+
+
+            return redirect(route('tasks.show',[
+                'task' => $task,
+            ]));
+        }
+
+        return view ('task.askCantDelete',[
+            'task' => $task,
+        ]);
     }
 }

@@ -6,9 +6,9 @@
 </div>
 <form method="POST" action="{{route('messages.delete',['message'=>$message->id])}}" enctype="multipart/form-data">
     @csrf
-    @include('message.enterPass')
+    @include('commons.enterPass')
 </form>
 <div class = "offset-sm-4 col-sm-4">
-    {{link_to_route('messages.show','いいえ',[$message->id],['class'=>'btn btn-block btn-success'])}}
+    {{link_to_route('messages.show','取消',[$message->id],['class'=>'btn btn-block btn-success'])}}
 </div>
 @endsection('content')

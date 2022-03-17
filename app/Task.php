@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Traits\Macroable;
+use \App\Progress;
 use DB;
 
 class Task extends Model
@@ -13,6 +14,11 @@ class Task extends Model
         return $this->belongsToMany(User::class,'usersTasks','taskId','userId')->withTimestamps();
     }
 
+    public function progresses()
+    {
+        return $this->hasMany(Progresse::class,'taskId')->get();
+    }
+    
     public function existInCharge()
     {
         if(DB::table('usersTasks')->where('taskId',$this->id)->exists()){

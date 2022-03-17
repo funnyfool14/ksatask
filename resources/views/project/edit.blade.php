@@ -37,14 +37,12 @@
         </div>
         <div class='form-group'>
             <label for="detail">詳細</label>
-            <input type="text" class="form-control" name="detail" value="{{$project->detail}}">
+            <textarea type="text" class="form-control" name="detail">{{$project->detail}}</textarea>
         </div>
         <div class="text-center mt-5 mb-5">
             <button type="submit" class='btn btn-primary btn-lg mt-5 col-sm-8'>変更</button>
         </div> 
     </form>
 </div>
-<div class = "offset-sm-4 col-sm-4 mt-5 mt-5 mb-5">
-    {{link_to_route('projects.show','プロジェクトTOP',['project'=>$project->id],['class' => 'btn btn-outline-success btn-block'])}}
-</div>
+@include('project.back')
 @endsection('content')
