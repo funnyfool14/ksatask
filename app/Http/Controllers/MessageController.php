@@ -68,6 +68,7 @@ class MessageController extends Controller
         $message = Message::find($id);
         $message->status = 'unread';
         $reciever = User::find($message->reciever);
+        $message->save();
 
         Mail::to($reciever->email)->send(new SendMessage($message));
 
