@@ -91,12 +91,14 @@
                     <div class = "col-sm-2">
                         {{link_to_route('progress.predelete','削除',['progress'=>$progress->id],['class'=>'btn btn-block btn-danger btn-sm'])}}
                     </div>
-                    <h4 class = "mt-1 mr-4">{{$progress->user()->firstName.' '.$progress->user()->lastName}}</h4>
                     @else
-                    <h4 class = "offset-sm-4 mt-1 mr-4">{{$progress->user()->firstName.' '.$progress->user()->lastName}}</h4>
+                    <h5 class = "offset-sm-2 col-sm-2 mt-2">{{$progress->date()}}</h5>
                     @endif
+                <h4 class = "mt-1 mr-4">{{$progress->user()->firstName.' '.$progress->user()->lastName}}</h4>
+                @else
+                <h5 class = "mt-2 offset-sm-2 col-sm-2">{{$progress->date()}}</h5>
+                <h4 class = "mt-1 mr-4">{{$progress->user()->firstName.' '.$progress->user()->lastName}}</h4>
                 @endif
-                <h5 class = "mt-2">{{$progress->date()}}</h5>
             </div>
             @endforeach
         </div>
