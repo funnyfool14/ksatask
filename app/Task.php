@@ -16,7 +16,7 @@ class Task extends Model
 
     public function progresses()
     {
-        return $this->hasMany(Progresse::class,'taskId')->get();
+        return $this->hasMany(Progresse::class,'taskId')->orderBy('id', 'desc')->get();
     }
     
     public function existInCharge()
